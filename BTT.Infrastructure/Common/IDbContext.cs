@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BTT.Domain.Models.Notifications
+namespace BTT.Infrastructure.Common
 {
-    public class OrganizationNotification : BaseNotification
+    public interface IDbContext
     {
     }
 }

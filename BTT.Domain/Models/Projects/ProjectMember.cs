@@ -9,15 +9,12 @@ namespace BTT.Domain.Models.Projects
 {
     public class ProjectMember
     {
-        public Guid Id { get; }
-
         public Guid ProjectId { get; }
 
         public Guid MemberId { get; }
 
         public ProjectMember(Project project, Member member)
         {
-            this.Id = Guid.NewGuid();
             this.ProjectId = project.Id;
             this.MemberId = member.Id;
         }

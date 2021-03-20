@@ -93,11 +93,6 @@ namespace BTT.Domain.Models.Members
             _issues.Remove(issue);
         }
 
-        public void RemoveIssueById(Guid id)
-        {
-            _issues.RemoveAll(i => i.Id == id);
-        }
-
         public void AddNotification(BaseNotification notification)
         {
             _notifications.Add(notification);
@@ -106,11 +101,6 @@ namespace BTT.Domain.Models.Members
         public void RemoveNotification(BaseNotification notification)
         {
             _notifications.Remove(notification);
-        }
-
-        public void RemoveNotificationById(Guid id)
-        {
-            _notifications.RemoveAll(n => (Guid)n.Id == id);
         }
     }
 }

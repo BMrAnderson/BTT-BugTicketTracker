@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BTT.Domain.Models.Notifications
 {
-    class MemberNotification
+    public class MemberNotification : BaseNotification
     {
     }
 }
