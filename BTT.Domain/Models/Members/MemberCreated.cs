@@ -5,19 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BTT.Domain.Models.Issues
+namespace BTT.Domain.Models.Members
 {
-    public class IssueCreated : IDomainEvent
+    public class MemberCreated : IDomainEvent
     {
         public Guid EventId { get; }
 
         public DateTimeOffset EventDateOccured { get; }
 
-        public Issue Issue { get; }
+        public Member Member { get; }
 
-        public IssueCreated(Issue issue)
+        public MemberCreated(Member member)
         {
-            this.Issue = issue;        
+            this.Member = member;         
             this.EventId = Guid.NewGuid();
             this.EventDateOccured = DateTimeOffset.Now;
         }

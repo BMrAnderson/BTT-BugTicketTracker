@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BTT.Domain.Common.Events
+namespace BTT.Domain.Models.Email
 {
-    class DomainEvent
+    class IEmailRepository
     {
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BTT.Domain.Common.Models
+namespace BTT.Domain.Models.Notifications
 {
-    public interface IAggregateRoot
+    class OrganizationNotification
     {
     }
 }

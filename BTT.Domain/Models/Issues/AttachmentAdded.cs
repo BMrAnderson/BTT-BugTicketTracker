@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace BTT.Domain.Models.Issues
 {
-    public class IssueCreated : IDomainEvent
+    public class AttachmentAdded : IDomainEvent
     {
         public Guid EventId { get; }
 
         public DateTimeOffset EventDateOccured { get; }
 
-        public Issue Issue { get; }
+        public Attachment Attachment { get; }
 
-        public IssueCreated(Issue issue)
+        public AttachmentAdded(Attachment attachment)
         {
-            this.Issue = issue;        
+            this.Attachment = attachment;
             this.EventId = Guid.NewGuid();
             this.EventDateOccured = DateTimeOffset.Now;
         }
