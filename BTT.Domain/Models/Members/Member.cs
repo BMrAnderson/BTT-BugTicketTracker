@@ -12,7 +12,7 @@ namespace BTT.Domain.Models.Members
 {
     public class Member : Entity, IAggregateRoot
     {
-        public Member(string firstName, string lastName, string email, string password, Member supervisor)
+        public Member(string firstName, string lastName, string email, string password)
         {
             if (string.IsNullOrEmpty(firstName)) 
                 throw new ArgumentNullException(nameof(firstName));
@@ -24,17 +24,13 @@ namespace BTT.Domain.Models.Members
                 throw new ArgumentNullException(nameof(email));
             
             if (string.IsNullOrEmpty(password)) 
-                throw new ArgumentNullException(nameof(password));
-            
-            if (supervisor is null) 
-                throw new ArgumentNullException(nameof(supervisor));
+                throw new ArgumentNullException(nameof(password));          
 
             this.Id = Guid.NewGuid();
             this.FirstName = firstName;
             this.LastName = lastName;
             this.Email = email;
             this.Password = password;
-            this.SupervisorId = supervisor.Id;
 
             _projects = new List<Project>();
             _issues = new List<Issue>();
@@ -49,7 +45,6 @@ namespace BTT.Domain.Models.Members
 
         public string Password { get; private set; }
 
-        public Guid SupervisorId { get; private set; }
 
         private List<Project> _projects;
         public IReadOnlyCollection<Project> Projects { 
@@ -62,7 +57,7 @@ namespace BTT.Domain.Models.Members
         }
 
         private List<BaseNotification> _notifications;
-        public IReadOnlyCollection<INotification> Notifications {
+        public IReadOnlyCollection<BaseNotification> Notifications {
             get => _notifications.AsReadOnly();
         }
 

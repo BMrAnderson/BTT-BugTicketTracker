@@ -17,7 +17,6 @@ namespace BTT.Domain.Models.Issues
             this.Text = text;
             this.DateCommented = dateCommented;
         }
-
         public Guid MemberId { get; private set; }
 
         public Guid IssueId { get; private set; }

@@ -12,8 +12,10 @@ namespace BTT.Domain.Models.Issues
 {
     public class Issue : Entity, IAggregateRoot
     {
-        public Issue(Member memberAssigned, Member submitter, Project assignedProject,
-            string title, string description, DateTimeOffset dueDate)
+        private Issue() { }
+
+        public Issue(Member memberAssigned, Project assignedProject,
+            string title, string description, Priority priorityLevel , DateTimeOffset dueDate)
         {
             if (memberAssigned is null)
                 throw new ArgumentNullException(nameof(memberAssigned));
@@ -22,9 +24,9 @@ namespace BTT.Domain.Models.Issues
             this.Id = Guid.NewGuid();
             this.AssignedMemberId = memberAssigned.Id;
             this.AssignedProjectId = assignedProject.Id;
-            this.SubmitterId = submitter.Id;
             this.Title = title;
             this.Description = description;
+            this.Priority = priorityLevel;
             this.DueDate = dueDate;
 
             _comments = new List<Comment>();
@@ -41,9 +43,9 @@ namespace BTT.Domain.Models.Issues
 
         public Guid AssignedMemberId { get; private set; }
 
-        public Guid SubmitterId { get; private set; }
-
         public Guid AssignedProjectId { get; private set; }
+
+        public Priority Priority { get; private set; }
 
         private readonly List<Comment> _comments;
         public IReadOnlyCollection<Comment> Comments { 

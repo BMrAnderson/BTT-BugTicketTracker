@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BTT.Infrastructure.Common
+namespace BTT.Infrastructure.Common.Persistence.Configurations
 {
-    public interface IDbContext
+    class ProjectEntityTypeConfiguration
     {
     }
 }

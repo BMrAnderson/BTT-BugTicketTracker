@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BTT.Domain.Common.Repository
 {
-    public interface IRepository<TEntity> where TEntity : IAggregateRoot
+    public interface IRepository<TEntity> where TEntity : class
     {
         TEntity FindById(Guid id);
         IEnumerable<TEntity> GetAll();
