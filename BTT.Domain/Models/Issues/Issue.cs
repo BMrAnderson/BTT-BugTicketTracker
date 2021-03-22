@@ -19,6 +19,8 @@ namespace BTT.Domain.Models.Issues
                 throw new ArgumentNullException(nameof(assignedMember));
 
             this.Id = Guid.NewGuid();
+            this.ProjectId = assignedProject.Id;
+            this.MemberId = assignedMember.Id;
             this.Project = assignedProject;
             this.Member = assignedMember;
             this.Title = title;
@@ -40,6 +42,10 @@ namespace BTT.Domain.Models.Issues
         public DateTimeOffset DueDate { get; private set; }
 
         public Priority Priority { get; private set; }
+
+        public Guid ProjectId { get; private set; }
+
+        public Guid MemberId { get; private set; }
 
         public virtual Project Project { get; private set; }
 

@@ -17,6 +17,7 @@ namespace BTT.Domain.Models.Projects
         {
             this.Id = Guid.NewGuid();
             this.OrganizationId = organization.Id;
+            this.Organization = organization;
             this.Title = title;
             this.Description = description;
             this.DueDate = dueDate;
@@ -25,6 +26,8 @@ namespace BTT.Domain.Models.Projects
             this._issues = new List<Issue>();
             this._projectMembers = new List<ProjectMember>();
         }
+
+        public virtual Organization Organization { get; private set; }
 
         public Guid OrganizationId { get; private set; }
 

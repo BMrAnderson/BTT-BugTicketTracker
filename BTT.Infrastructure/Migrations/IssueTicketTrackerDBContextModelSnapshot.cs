@@ -36,13 +36,16 @@ namespace BTT.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("DueDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid?>("MemberId")
+                    b.Property<Guid>("MemberId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MemberId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ProjectId")
+                    b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
@@ -54,7 +57,7 @@ namespace BTT.Infrastructure.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("MemberId1");
 
                     b.ToTable("Issues");
                 });
@@ -63,9 +66,6 @@ namespace BTT.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AssignedOrganizationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
@@ -83,7 +83,7 @@ namespace BTT.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid?>("OrganizationId")
+                    b.Property<Guid>("OrganizationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Password")
@@ -92,8 +92,6 @@ namespace BTT.Infrastructure.Migrations
                         .HasColumnType("nvarchar(12)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AssignedOrganizationId");
 
                     b.HasIndex("OrganizationId");
 
@@ -137,17 +135,12 @@ namespace BTT.Infrastructure.Migrations
                     b.Property<Guid>("OrganizationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("OrganizationId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
-
-                    b.HasIndex("OrganizationId1");
 
                     b.ToTable("Projects");
                 });
@@ -169,13 +162,17 @@ namespace BTT.Infrastructure.Migrations
 
             modelBuilder.Entity("BTT.Domain.Models.Issues.Issue", b =>
                 {
-                    b.HasOne("BTT.Domain.Models.Members.Member", "Member")
-                        .WithMany("Issues")
-                        .HasForeignKey("MemberId");
-
                     b.HasOne("BTT.Domain.Models.Projects.Project", "Project")
                         .WithMany("Issues")
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BTT.Domain.Models.Members.Member", "Member")
+                        .WithMany("Issues")
+                        .HasForeignKey("MemberId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.OwnsMany("BTT.Domain.Models.Issues.Attachment", "Attachments", b1 =>
                         {
@@ -239,28 +236,24 @@ namespace BTT.Infrastructure.Migrations
 
             modelBuilder.Entity("BTT.Domain.Models.Members.Member", b =>
                 {
-                    b.HasOne("BTT.Domain.Models.Organizations.Organization", null)
-                        .WithMany()
-                        .HasForeignKey("AssignedOrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BTT.Domain.Models.Organizations.Organization", null)
+                    b.HasOne("BTT.Domain.Models.Organizations.Organization", "Organization")
                         .WithMany("Members")
-                        .HasForeignKey("OrganizationId");
-                });
-
-            modelBuilder.Entity("BTT.Domain.Models.Projects.Project", b =>
-                {
-                    b.HasOne("BTT.Domain.Models.Organizations.Organization", null)
-                        .WithMany()
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BTT.Domain.Models.Organizations.Organization", null)
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("BTT.Domain.Models.Projects.Project", b =>
+                {
+                    b.HasOne("BTT.Domain.Models.Organizations.Organization", "Organization")
                         .WithMany("Projects")
-                        .HasForeignKey("OrganizationId1");
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Organization");
                 });
 
             modelBuilder.Entity("BTT.Domain.Models.Projects.ProjectMember", b =>

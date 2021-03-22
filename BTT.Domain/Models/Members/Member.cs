@@ -32,7 +32,8 @@ namespace BTT.Domain.Models.Members
                 throw new ArgumentNullException(nameof(password));
 
             this.Id = Guid.NewGuid();
-            this.AssignedOrganizationId = organization.Id;
+            this.OrganizationId = organization.Id;
+            this.Organization = organization;
             this.FirstName = firstName;
             this.LastName = lastName;
             this.Email = email;
@@ -51,7 +52,9 @@ namespace BTT.Domain.Models.Members
 
         public string Password { get; private set; }
 
-        public Guid AssignedOrganizationId { get; set; }
+        public Guid OrganizationId { get; private set; }
+
+        public virtual Organization Organization { get; private set; }
 
         private readonly List<ProjectMember> _memberProjects;
 

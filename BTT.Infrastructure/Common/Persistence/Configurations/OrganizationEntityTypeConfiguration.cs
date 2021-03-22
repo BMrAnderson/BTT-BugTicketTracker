@@ -14,13 +14,13 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.Property(o => o.Name).HasMaxLength(50).IsRequired();
 
-            //builder.HasMany(o => o.Members);
+            builder.HasMany(o => o.Members).WithOne(m => m.Organization).HasForeignKey(m => m.OrganizationId);
 
-            //builder.Navigation(o => o.Members).Metadata.SetField("_members");
+            builder.Navigation(o => o.Members).Metadata.SetField("_members");
 
-            //builder.HasMany(o => o.Projects);
+            builder.HasMany(o => o.Projects).WithOne(p => p.Organization).HasForeignKey(p => p.OrganizationId);
 
-            //builder.Navigation(o => o.Projects).Metadata.SetField("_projects");
+            builder.Navigation(o => o.Projects).Metadata.SetField("_projects");
         }
     }
 }

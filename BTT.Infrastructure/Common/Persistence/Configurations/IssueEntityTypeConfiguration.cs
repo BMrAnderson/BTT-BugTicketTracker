@@ -20,7 +20,7 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.HasOne<Member>(i => i.Member).WithMany(m => m.Issues);
 
-            builder.HasOne<Project>(i => i.Project).WithMany(p => p.Issues);
+            builder.HasOne<Project>(i => i.Project).WithMany(p => p.Issues).HasForeignKey(i => i.MemberId).OnDelete(DeleteBehavior.Restrict);
 
             builder.OwnsMany(i => i.Attachments);
 

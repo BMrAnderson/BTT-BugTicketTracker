@@ -21,7 +21,7 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.Property(m => m.Password).HasMaxLength(12).IsRequired();
 
-            builder.HasOne<Organization>().WithMany().HasForeignKey(m => m.AssignedOrganizationId);
+            builder.HasOne<Organization>().WithMany().HasForeignKey(m => m.OrganizationId);
 
             builder.HasMany(m => m.Issues).WithOne(i => i.Member);
 

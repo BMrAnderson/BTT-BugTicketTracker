@@ -19,7 +19,7 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.Navigation(p => p.Issues).Metadata.SetField("_issues");
 
-            builder.HasOne<Organization>().WithMany().HasForeignKey(p => p.OrganizationId);
+            builder.HasOne<Organization>(p => p.Organization).WithMany(o => o.Projects).HasForeignKey(p => p.OrganizationId);
         }
     }
 }

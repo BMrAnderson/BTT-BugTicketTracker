@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BTT.Infrastructure.Migrations
 {
@@ -29,24 +29,17 @@ namespace BTT.Infrastructure.Migrations
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
-                    AssignedOrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    OrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Members", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Members_Organizations_AssignedOrganizationId",
-                        column: x => x.AssignedOrganizationId,
-                        principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Members_Organizations_OrganizationId",
                         column: x => x.OrganizationId,
                         principalTable: "Organizations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,8 +51,7 @@ namespace BTT.Infrastructure.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateCreated = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    DueDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    OrganizationId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    DueDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,12 +62,6 @@ namespace BTT.Infrastructure.Migrations
                         principalTable: "Organizations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Projects_Organizations_OrganizationId1",
-                        column: x => x.OrganizationId1,
-                        principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,21 +74,22 @@ namespace BTT.Infrastructure.Migrations
                     DateSubmitted = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     DueDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    MemberId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MemberId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MemberId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Issues", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Issues_Members_MemberId",
-                        column: x => x.MemberId,
+                        name: "FK_Issues_Members_MemberId1",
+                        column: x => x.MemberId1,
                         principalTable: "Members",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Issues_Projects_ProjectId",
-                        column: x => x.ProjectId,
+                        name: "FK_Issues_Projects_MemberId",
+                        column: x => x.MemberId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -181,14 +168,9 @@ namespace BTT.Infrastructure.Migrations
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Issues_ProjectId",
+                name: "IX_Issues_MemberId1",
                 table: "Issues",
-                column: "ProjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Members_AssignedOrganizationId",
-                table: "Members",
-                column: "AssignedOrganizationId");
+                column: "MemberId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Members_OrganizationId",
@@ -204,11 +186,6 @@ namespace BTT.Infrastructure.Migrations
                 name: "IX_Projects_OrganizationId",
                 table: "Projects",
                 column: "OrganizationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Projects_OrganizationId1",
-                table: "Projects",
-                column: "OrganizationId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
