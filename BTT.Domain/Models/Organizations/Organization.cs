@@ -11,10 +11,15 @@ namespace BTT.Domain.Models.Organizations
 {
     public class Organization : Entity, IAggregateRoot
     {
+        private Organization() { }
+
         public Organization(string name)
         {
             this.Id = Guid.NewGuid();
             this.Name = name;
+
+            _members = new List<Member>();
+            _projects = new List<Project>();
         }
         public string Name { get; private set; }
 

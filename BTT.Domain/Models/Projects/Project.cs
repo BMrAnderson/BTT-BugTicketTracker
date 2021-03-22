@@ -12,6 +12,8 @@ namespace BTT.Domain.Models.Projects
 {
     public class Project : Entity, IAggregateRoot
     {
+        private Project() { }
+
         public Project(Organization organization, 
             string title, string description, DateTimeOffset dueDate )
         {

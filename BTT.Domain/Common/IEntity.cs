@@ -9,8 +9,8 @@ namespace BTT.Domain.Common
 {
     public interface IEntity
     {
-        IReadOnlyCollection<IDomainEvent> DomainEvents { get; }
+        //IReadOnlyCollection<IDomainEvent> DomainEvents { get; }
 
-        void ClearAllEvents();
+        //void ClearAllEvents();
     }
 }

@@ -10,6 +10,8 @@ namespace BTT.Domain.Models.Issues
 {
     public record Comment 
     {
+        private Comment() { }
+
         public Comment(string text, DateTimeOffset dateCommented)
         {
             this.Text = text;

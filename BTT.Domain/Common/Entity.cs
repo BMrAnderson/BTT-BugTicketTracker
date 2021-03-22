@@ -11,37 +11,37 @@ namespace BTT.Domain.Common.Models
     {
         public Entity()
         {
-            _domainEvents = new List<IDomainEvent>();
+            //_domainEvents = new List<IDomainEvent>();
         }
 
         public virtual Guid Id { get; protected set; }
 
-        private List<IDomainEvent> _domainEvents;
+        //private List<IDomainEvent> _domainEvents;
 
-        public IReadOnlyCollection<IDomainEvent> DomainEvents { 
-            get => _domainEvents.AsReadOnly(); 
-        }
+        //public IReadOnlyCollection<IDomainEvent> DomainEvents { 
+        //    get => _domainEvents.AsReadOnly(); 
+        //}
 
-        public void AddDomainEvent(IDomainEvent domainEvent)
-        {
-            _domainEvents = _domainEvents ?? new List<IDomainEvent>();
-            _domainEvents.Add(domainEvent);
-        }
+        //public void AddDomainEvent(IDomainEvent domainEvent)
+        //{
+        //    _domainEvents = _domainEvents ?? new List<IDomainEvent>();
+        //    _domainEvents.Add(domainEvent);
+        //}
 
-        public void RemoveDomainEventById(Guid id)
-        {
-            _domainEvents?.RemoveAll(e => e.EventId == id);
-        }
+        //public void RemoveDomainEventById(Guid id)
+        //{
+        //    _domainEvents?.RemoveAll(e => e.EventId == id);
+        //}
 
-        public void RemoveDomainEvent(IDomainEvent domainEvent)
-        {
-            _domainEvents?.Remove(domainEvent);
-        }
+        //public void RemoveDomainEvent(IDomainEvent domainEvent)
+        //{
+        //    _domainEvents?.Remove(domainEvent);
+        //}
 
-        public void ClearAllEvents()
-        {
-            _domainEvents?.Clear();
-        }
+        //public void ClearAllEvents()
+        //{
+        //    _domainEvents?.Clear();
+        //}
 
         public override bool Equals(object obj)
         {

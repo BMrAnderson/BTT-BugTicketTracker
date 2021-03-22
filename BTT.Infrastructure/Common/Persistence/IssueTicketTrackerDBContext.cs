@@ -1,7 +1,9 @@
 ﻿using BTT.Domain.Models.Issues;
 using BTT.Domain.Models.Members;
+using BTT.Domain.Models.Notifications;
 using BTT.Domain.Models.Organizations;
 using BTT.Domain.Models.Projects;
+using BTT.Infrastructure.Common.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -23,6 +25,9 @@ namespace BTT.Infrastructure.Common.Persistence
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            modelBuilder.Entity<Member>(m => m.HasData(new
+                Member("Brendon", "Anderson", "test", "test", new Organization("Oodah"))));
         }
     }
 } 

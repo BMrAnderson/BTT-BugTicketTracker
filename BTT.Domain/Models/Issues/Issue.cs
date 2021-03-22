@@ -62,7 +62,7 @@ namespace BTT.Domain.Models.Issues
         {
             _comments.Add(comment);
 
-            AddDomainEvent(new CommentAdded(comment));
+            //AddDomainEvent(new CommentAdded(comment));
         }
 
         public void RemoveComment(Comment comment)
@@ -74,7 +74,7 @@ namespace BTT.Domain.Models.Issues
         {
             _attachments.Add(attachment);
 
-            AddDomainEvent(new AttachmentAdded(attachment));
+            //AddDomainEvent(new AttachmentAdded(attachment));
         }
 
         public void RemoveAttachment(Attachment attachment)

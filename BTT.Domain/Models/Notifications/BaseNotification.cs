@@ -9,11 +9,11 @@ namespace BTT.Domain.Models.Notifications
 {
     public abstract class BaseNotification : INotification, IAggregateRoot
     {
-        public object Id { get; protected set; }
+        public Guid Id { get; protected set; }
        
-        public object MemberNotifiedId { get; protected set; }
+        public Guid MemberNotifiedId { get; protected set; }
         
-        public object NotificationColor { get; protected set; }
+        public string NotificationColor { get; protected set; }
         
         public DateTimeOffset DateReceived { get; protected set; }
         
@@ -21,7 +21,7 @@ namespace BTT.Domain.Models.Notifications
 
         public BaseNotification() { }
 
-        public BaseNotification(object id, object memberNotifiedId, object notificationColor, DateTimeOffset dateReceived, string text)
+        public BaseNotification(Guid id, Guid memberNotifiedId, string notificationColor, DateTimeOffset dateReceived, string text)
         {
             this.Id = id;
             this.MemberNotifiedId = memberNotifiedId;

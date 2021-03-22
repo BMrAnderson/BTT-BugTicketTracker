@@ -39,9 +39,9 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.Navigation(m => m.Projects).Metadata.SetField("_projects");
 
-            builder.OwnsMany(m => m.Notifications);
+            //builder.OwnsMany(m => m.Notifications);
 
-            builder.Navigation(m => m.Notifications).Metadata.SetField("_notifications");
+            //builder.Navigation(m => m.Notifications).Metadata.SetField("_notifications");
         }
     }
 }

@@ -10,6 +10,8 @@ namespace BTT.Domain.Models.Issues
 {
     public record Attachment
     {
+        private Attachment() { }
+
         public Attachment(string filename, string description)
         {
             this.FileName = filename;

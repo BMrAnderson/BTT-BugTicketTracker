@@ -13,6 +13,8 @@ namespace BTT.Domain.Models.Members
 {
     public class Member : Entity, IAggregateRoot
     {
+        private Member() { }
+
         public Member(string firstName, string lastName, string email, string password, Organization organization)
         {
             if (string.IsNullOrEmpty(firstName)) 
@@ -36,7 +38,7 @@ namespace BTT.Domain.Models.Members
 
             _projects = new List<Project>();
             _issues = new List<Issue>();
-            _notifications = new List<BaseNotification>();
+            //_notifications = new List<BaseNotification>();
         }
         
         public string FirstName { get; private set; }
@@ -59,16 +61,16 @@ namespace BTT.Domain.Models.Members
             get => _issues.AsReadOnly();
         }
 
-        private List<BaseNotification> _notifications;
-        public IReadOnlyCollection<BaseNotification> Notifications {
-            get => _notifications.AsReadOnly();
-        }
+        //private List<BaseNotification> _notifications;
+        //public IReadOnlyCollection<BaseNotification> Notifications {
+        //    get => _notifications.AsReadOnly();
+        //}
 
         public void AddProject(Project project)
         {
             _projects.Add(project);
 
-            AddDomainEvent(new ProjectCreated(project));
+            //AddDomainEvent(new ProjectCreated(project));
         }
 
         public void RemoveProject(Project project)
@@ -93,12 +95,12 @@ namespace BTT.Domain.Models.Members
 
         public void AddNotification(BaseNotification notification)
         {
-            _notifications.Add(notification);
+            //_notifications.Add(notification);
         }
 
         public void RemoveNotification(BaseNotification notification)
         {
-            _notifications.Remove(notification);
+           // _notifications.Remove(notification);
         }
     }
 }
