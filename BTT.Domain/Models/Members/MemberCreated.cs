@@ -1,9 +1,5 @@
 ﻿using BTT.Domain.Common.Events;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTT.Domain.Models.Members
 {
@@ -17,7 +13,7 @@ namespace BTT.Domain.Models.Members
 
         public MemberCreated(Member member)
         {
-            this.Member = member;         
+            this.Member = member;
             this.EventId = Guid.NewGuid();
             this.EventDateOccured = DateTimeOffset.Now;
         }

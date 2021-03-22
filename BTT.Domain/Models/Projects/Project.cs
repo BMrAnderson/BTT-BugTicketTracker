@@ -1,21 +1,19 @@
 ﻿using BTT.Domain.Common.Models;
 using BTT.Domain.Models.Issues;
-using BTT.Domain.Models.Members;
 using BTT.Domain.Models.Organizations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTT.Domain.Models.Projects
 {
     public class Project : Entity, IAggregateRoot
     {
-        private Project() { }
+        private Project()
+        {
+        }
 
-        public Project(Organization organization, 
-            string title, string description, DateTimeOffset dueDate )
+        public Project(Organization organization,
+            string title, string description, DateTimeOffset dueDate)
         {
             this.Id = Guid.NewGuid();
             this.OrganizationId = organization.Id;
@@ -25,7 +23,7 @@ namespace BTT.Domain.Models.Projects
             this.DateCreated = DateTimeOffset.Now;
 
             this._issues = new List<Issue>();
-            this._members = new List<Member>();
+            this._projectMembers = new List<ProjectMember>();
         }
 
         public Guid OrganizationId { get; private set; }
@@ -38,19 +36,23 @@ namespace BTT.Domain.Models.Projects
 
         public DateTimeOffset DueDate { get; private set; }
 
-        private List<Issue> _issues;
-        public IReadOnlyCollection<Issue> Issues {
-            get => _issues.AsReadOnly(); 
-        }
+        private readonly List<Issue> _issues;
 
-        private List<Member> _members;
-        public IReadOnlyCollection<Member> Members {
-            get => _members.AsReadOnly(); 
-        }
-
-        public void AddProjectMember(Member member)
+        public virtual IReadOnlyCollection<Issue> Issues
         {
-            _members.Add(member);
+            get => _issues.AsReadOnly();
+        }
+
+        private readonly List<ProjectMember> _projectMembers;
+
+        public virtual IReadOnlyCollection<ProjectMember> ProjectMembers
+        {
+            get => _projectMembers.AsReadOnly();
+        }
+
+        public void AddProjectMember(ProjectMember member)
+        {
+            _projectMembers.Add(member);
         }
 
         public void AddProjectIssue(Issue issue)
@@ -58,9 +60,9 @@ namespace BTT.Domain.Models.Projects
             _issues.Add(issue);
         }
 
-        public void RemoveProjectMember(Member member)
+        public void RemoveProjectMember(ProjectMember member)
         {
-            _members.Remove(member);
+            _projectMembers.Remove(member);
         }
 
         public void RemoveProjectIssue(Issue issue)

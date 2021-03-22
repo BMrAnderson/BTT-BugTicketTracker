@@ -1,13 +1,9 @@
-﻿using BTT.Domain.Common;
-using BTT.Domain.Common.Models;
+﻿using BTT.Domain.Common.Models;
 using BTT.Domain.Common.Repository;
 using BTT.Infrastructure.Common.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTT.Infrastructure.Domain.Repositories
 {
@@ -21,7 +17,7 @@ namespace BTT.Infrastructure.Domain.Repositories
         {
             this.Context = dbContext;
 
-            _dbSet = dbContext != null ? Context.Set<TEntity>() 
+            _dbSet = dbContext != null ? Context.Set<TEntity>()
                 : throw new ArgumentNullException(nameof(dbContext));
         }
 
@@ -32,7 +28,7 @@ namespace BTT.Infrastructure.Domain.Repositories
 
         public TEntity FindById(Guid id)
         {
-           return _dbSet.Find((object)id);
+            return _dbSet.Find((object)id);
         }
 
         public IEnumerable<TEntity> GetAll()

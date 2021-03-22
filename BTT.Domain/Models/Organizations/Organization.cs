@@ -3,15 +3,14 @@ using BTT.Domain.Models.Members;
 using BTT.Domain.Models.Projects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTT.Domain.Models.Organizations
 {
     public class Organization : Entity, IAggregateRoot
     {
-        private Organization() { }
+        private Organization()
+        {
+        }
 
         public Organization(string name)
         {
@@ -21,17 +20,22 @@ namespace BTT.Domain.Models.Organizations
             _members = new List<Member>();
             _projects = new List<Project>();
         }
+
         public string Name { get; private set; }
 
         public DateTimeOffset OrganizationStartedDate { get; private set; }
 
-        private List<Project> _projects;
-        public IReadOnlyCollection<Project> Projects { 
-            get => _projects.AsReadOnly(); 
+        private readonly List<Project> _projects;
+
+        public virtual IReadOnlyCollection<Project> Projects
+        {
+            get => _projects.AsReadOnly();
         }
 
-        private List<Member> _members;
-        public IReadOnlyCollection<Member> Members {
+        private readonly List<Member> _members;
+
+        public virtual IReadOnlyCollection<Member> Members
+        {
             get => _members.AsReadOnly();
         }
 

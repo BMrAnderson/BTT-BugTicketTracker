@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BTT.Domain.Common.Events
+﻿namespace BTT.Domain.Common.Events
 {
-    interface Handle
+    internal interface Handle
     {
     }
 }

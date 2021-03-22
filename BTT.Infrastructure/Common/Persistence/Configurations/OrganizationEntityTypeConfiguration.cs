@@ -1,11 +1,6 @@
 ﻿using BTT.Domain.Models.Organizations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTT.Infrastructure.Common.Persistence.Configurations
 {
@@ -19,14 +14,13 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.Property(o => o.Name).HasMaxLength(50).IsRequired();
 
-            builder.HasMany(o => o.Members);
+            //builder.HasMany(o => o.Members);
 
-            builder.Navigation(o => o.Members).Metadata.SetField("_members");
+            //builder.Navigation(o => o.Members).Metadata.SetField("_members");
 
-            builder.HasMany(o => o.Projects);
+            //builder.HasMany(o => o.Projects);
 
-            builder.Navigation(o => o.Projects).Metadata.SetField("_projects");
-                
+            //builder.Navigation(o => o.Projects).Metadata.SetField("_projects");
         }
     }
 }

@@ -1,13 +1,7 @@
-﻿using BTT.Domain.Models.Members;
-using BTT.Domain.Models.Organizations;
+﻿using BTT.Domain.Models.Organizations;
 using BTT.Domain.Models.Projects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTT.Infrastructure.Common.Persistence.Configurations
 {
@@ -19,11 +13,9 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.HasKey(p => p.Id);
 
-            builder.HasMany(p => p.Members);
+            builder.Navigation(p => p.ProjectMembers).Metadata.SetField("_projectMembers");
 
-            builder.Navigation(p => p.Members).Metadata.SetField("_members");
-
-            builder.HasMany(p => p.Issues);
+            builder.HasMany(p => p.Issues).WithOne(i => i.Project);
 
             builder.Navigation(p => p.Issues).Metadata.SetField("_issues");
 

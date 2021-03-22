@@ -1,9 +1,5 @@
-﻿using BTT.Domain.Common.Events;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTT.Domain.Common.Models
 {
@@ -18,8 +14,8 @@ namespace BTT.Domain.Common.Models
 
         //private List<IDomainEvent> _domainEvents;
 
-        //public IReadOnlyCollection<IDomainEvent> DomainEvents { 
-        //    get => _domainEvents.AsReadOnly(); 
+        //public IReadOnlyCollection<IDomainEvent> DomainEvents {
+        //    get => _domainEvents.AsReadOnly();
         //}
 
         //public void AddDomainEvent(IDomainEvent domainEvent)
@@ -45,13 +41,13 @@ namespace BTT.Domain.Common.Models
 
         public override bool Equals(object obj)
         {
-            if (obj is not Entity other) 
+            if (obj is not Entity other)
                 return false;
 
-            if (ReferenceEquals(this, other)) 
+            if (ReferenceEquals(this, other))
                 return true;
 
-            if (this.GetType() != other.GetType()) 
+            if (this.GetType() != other.GetType())
                 return false;
 
             if (this.Id.Equals(default) || other.Id.Equals(default))
@@ -68,10 +64,9 @@ namespace BTT.Domain.Common.Models
                 return left.Equals(right);
         }
 
-
         public static bool operator !=(Entity left, Entity right) => !(left == right);
 
-        public override int GetHashCode() => 
+        public override int GetHashCode() =>
             this.GetType().ToString()
             .Concat(this.Id.ToString())
             .GetHashCode();

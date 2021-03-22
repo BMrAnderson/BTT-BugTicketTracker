@@ -1,14 +1,8 @@
-﻿using BTT.Domain.Common.Models;
-using BTT.Domain.Models.Members;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace BTT.Domain.Models.Issues
 {
-    public record Comment 
+    public record Comment
     {
         private Comment() { }
 

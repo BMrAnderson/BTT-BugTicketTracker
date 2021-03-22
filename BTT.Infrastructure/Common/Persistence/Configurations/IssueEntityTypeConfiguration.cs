@@ -18,16 +18,16 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.Property(i => i.Description).HasMaxLength(200).IsRequired();
 
-            builder.HasOne<Member>().WithMany().HasForeignKey(m => m.AssignedMemberId);
+            builder.HasOne<Member>(i => i.Member).WithMany(m => m.Issues);
 
-            builder.HasOne<Project>().WithMany().HasForeignKey(i => i.AssignedProjectId);
+            builder.HasOne<Project>(i => i.Project).WithMany(p => p.Issues);
 
             builder.OwnsMany(i => i.Attachments);
-            
+
             builder.Navigation(i => i.Attachments).Metadata.SetField("_attachments");
 
             builder.OwnsMany(i => i.Comments);
-            
+
             builder.Navigation(i => i.Comments).Metadata.SetField("_comments");
         }
     }

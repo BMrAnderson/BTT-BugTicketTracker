@@ -13,21 +13,23 @@ namespace BTT.Domain.Models.Members
 {
     public class Member : Entity, IAggregateRoot
     {
-        private Member() { }
+        private Member()
+        {
+        }
 
         public Member(string firstName, string lastName, string email, string password, Organization organization)
         {
-            if (string.IsNullOrEmpty(firstName)) 
+            if (string.IsNullOrEmpty(firstName))
                 throw new ArgumentNullException(nameof(firstName));
-           
-            if (string.IsNullOrEmpty(lastName)) 
+
+            if (string.IsNullOrEmpty(lastName))
                 throw new ArgumentNullException(nameof(lastName));
-            
-            if (string.IsNullOrEmpty(email)) 
+
+            if (string.IsNullOrEmpty(email))
                 throw new ArgumentNullException(nameof(email));
-            
-            if (string.IsNullOrEmpty(password)) 
-                throw new ArgumentNullException(nameof(password));          
+
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentNullException(nameof(password));
 
             this.Id = Guid.NewGuid();
             this.AssignedOrganizationId = organization.Id;
@@ -36,11 +38,11 @@ namespace BTT.Domain.Models.Members
             this.Email = email;
             this.Password = password;
 
-            _projects = new List<Project>();
+            _memberProjects = new List<ProjectMember>();
             _issues = new List<Issue>();
             //_notifications = new List<BaseNotification>();
         }
-        
+
         public string FirstName { get; private set; }
 
         public string LastName { get; private set; }
@@ -51,13 +53,15 @@ namespace BTT.Domain.Models.Members
 
         public Guid AssignedOrganizationId { get; set; }
 
-        private List<Project> _projects;
-        public IReadOnlyCollection<Project> Projects { 
-            get => _projects.AsReadOnly(); 
+        private readonly List<ProjectMember> _memberProjects;
+
+        public virtual IReadOnlyCollection<ProjectMember> MemberProjects {
+            get => _memberProjects.AsReadOnly();
         }
 
-        private List<Issue> _issues;
-        public IReadOnlyCollection<Issue> Issues {
+        private readonly List<Issue> _issues;
+
+        public virtual IReadOnlyCollection<Issue> Issues {
             get => _issues.AsReadOnly();
         }
 
@@ -66,22 +70,22 @@ namespace BTT.Domain.Models.Members
         //    get => _notifications.AsReadOnly();
         //}
 
-        public void AddProject(Project project)
+        public void AddProject(ProjectMember project)
         {
-            _projects.Add(project);
+            _memberProjects.Add(project);
 
             //AddDomainEvent(new ProjectCreated(project));
         }
 
-        public void RemoveProject(Project project)
+        public void RemoveProject(ProjectMember project)
         {
-            _projects.Remove(project);
+            _memberProjects.Remove(project);
         }
 
-        public void RemoveProjectById(Guid id)
-        {
-            _projects.RemoveAll(p => p.Id == id);
-        }
+        //public void RemoveProjectById(Guid id)
+        //{
+        //    _projects.RemoveAll(p => p.Id == id);
+        //}
 
         public void AddIssue(Issue issue)
         {

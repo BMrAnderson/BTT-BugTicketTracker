@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 namespace BTT.Infrastructure.Migrations
 {
@@ -11,9 +11,9 @@ namespace BTT.Infrastructure.Migrations
                 name: "Organizations",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    OrganizationStartedDate = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    OrganizationStartedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -24,13 +24,13 @@ namespace BTT.Infrastructure.Migrations
                 name: "Members",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    FirstName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Password = table.Column<string>(type: "TEXT", maxLength: 12, nullable: false),
-                    AssignedOrganizationId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    OrganizationId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
+                    AssignedOrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -53,13 +53,13 @@ namespace BTT.Infrastructure.Migrations
                 name: "Projects",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    OrganizationId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Title = table.Column<string>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    DateCreated = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    DueDate = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    OrganizationId1 = table.Column<Guid>(type: "TEXT", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateCreated = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    DueDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    OrganizationId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -82,38 +82,24 @@ namespace BTT.Infrastructure.Migrations
                 name: "Issues",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Title = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    DateSubmitted = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    DueDate = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    AssignedMemberId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    AssignedProjectId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Priority = table.Column<int>(type: "INTEGER", nullable: false),
-                    MemberId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    ProjectId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    DateSubmitted = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    DueDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    MemberId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Issues", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Issues_Members_AssignedMemberId",
-                        column: x => x.AssignedMemberId,
-                        principalTable: "Members",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Issues_Members_MemberId",
                         column: x => x.MemberId,
                         principalTable: "Members",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Issues_Projects_AssignedProjectId",
-                        column: x => x.AssignedProjectId,
-                        principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Issues_Projects_ProjectId",
                         column: x => x.ProjectId,
@@ -123,38 +109,39 @@ namespace BTT.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MemberProject",
+                name: "ProjectMembers",
                 columns: table => new
                 {
-                    MembersId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ProjectsId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MemberId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MemberProject", x => new { x.MembersId, x.ProjectsId });
+                    table.PrimaryKey("PK_ProjectMembers", x => new { x.ProjectId, x.MemberId });
                     table.ForeignKey(
-                        name: "FK_MemberProject_Members_MembersId",
-                        column: x => x.MembersId,
+                        name: "FK_ProjectMembers_Members_MemberId",
+                        column: x => x.MemberId,
                         principalTable: "Members",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_MemberProject_Projects_ProjectsId",
-                        column: x => x.ProjectsId,
+                        name: "FK_ProjectMembers_Projects_ProjectId",
+                        column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Attachment",
                 columns: table => new
                 {
-                    IssueId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Id = table.Column<int>(type: "INTEGER", nullable: false),
-                    FileName = table.Column<string>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    DateAdded = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
+                    IssueId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -171,10 +158,11 @@ namespace BTT.Infrastructure.Migrations
                 name: "Comment",
                 columns: table => new
                 {
-                    IssueId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Id = table.Column<int>(type: "INTEGER", nullable: false),
-                    Text = table.Column<string>(type: "TEXT", nullable: true),
-                    DateCommented = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
+                    IssueId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateCommented = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -188,16 +176,6 @@ namespace BTT.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Issues_AssignedMemberId",
-                table: "Issues",
-                column: "AssignedMemberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Issues_AssignedProjectId",
-                table: "Issues",
-                column: "AssignedProjectId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Issues_MemberId",
                 table: "Issues",
                 column: "MemberId");
@@ -208,11 +186,6 @@ namespace BTT.Infrastructure.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MemberProject_ProjectsId",
-                table: "MemberProject",
-                column: "ProjectsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Members_AssignedOrganizationId",
                 table: "Members",
                 column: "AssignedOrganizationId");
@@ -221,6 +194,11 @@ namespace BTT.Infrastructure.Migrations
                 name: "IX_Members_OrganizationId",
                 table: "Members",
                 column: "OrganizationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProjectMembers_MemberId",
+                table: "ProjectMembers",
+                column: "MemberId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_OrganizationId",
@@ -242,7 +220,7 @@ namespace BTT.Infrastructure.Migrations
                 name: "Comment");
 
             migrationBuilder.DropTable(
-                name: "MemberProject");
+                name: "ProjectMembers");
 
             migrationBuilder.DropTable(
                 name: "Issues");

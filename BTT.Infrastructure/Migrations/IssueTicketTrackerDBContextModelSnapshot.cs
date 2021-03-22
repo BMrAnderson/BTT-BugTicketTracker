@@ -3,6 +3,7 @@ using System;
 using BTT.Infrastructure.Common.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BTT.Infrastructure.Migrations
@@ -14,50 +15,42 @@ namespace BTT.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.4");
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("BTT.Domain.Models.Issues.Issue", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("AssignedMemberId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("AssignedProjectId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("DateSubmitted")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTimeOffset>("DueDate")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("MemberId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("ProjectId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AssignedMemberId");
-
-                    b.HasIndex("AssignedProjectId");
 
                     b.HasIndex("MemberId");
 
@@ -70,33 +63,33 @@ namespace BTT.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AssignedOrganizationId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid?>("OrganizationId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(12)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(12)");
 
                     b.HasKey("Id");
 
@@ -111,15 +104,15 @@ namespace BTT.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTimeOffset>("OrganizationStartedDate")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -130,25 +123,25 @@ namespace BTT.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("DateCreated")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("DueDate")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("OrganizationId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("OrganizationId1")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -159,60 +152,49 @@ namespace BTT.Infrastructure.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("MemberProject", b =>
+            modelBuilder.Entity("BTT.Domain.Models.Projects.ProjectMember", b =>
                 {
-                    b.Property<Guid>("MembersId")
-                        .HasColumnType("TEXT");
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProjectsId")
-                        .HasColumnType("TEXT");
+                    b.Property<Guid?>("MemberId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("MembersId", "ProjectsId");
+                    b.HasKey("ProjectId", "MemberId");
 
-                    b.HasIndex("ProjectsId");
+                    b.HasIndex("MemberId");
 
-                    b.ToTable("MemberProject");
+                    b.ToTable("ProjectMembers");
                 });
 
             modelBuilder.Entity("BTT.Domain.Models.Issues.Issue", b =>
                 {
-                    b.HasOne("BTT.Domain.Models.Members.Member", null)
-                        .WithMany()
-                        .HasForeignKey("AssignedMemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BTT.Domain.Models.Projects.Project", null)
-                        .WithMany()
-                        .HasForeignKey("AssignedProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BTT.Domain.Models.Members.Member", null)
+                    b.HasOne("BTT.Domain.Models.Members.Member", "Member")
                         .WithMany("Issues")
                         .HasForeignKey("MemberId");
 
-                    b.HasOne("BTT.Domain.Models.Projects.Project", null)
+                    b.HasOne("BTT.Domain.Models.Projects.Project", "Project")
                         .WithMany("Issues")
                         .HasForeignKey("ProjectId");
 
                     b.OwnsMany("BTT.Domain.Models.Issues.Attachment", "Attachments", b1 =>
                         {
                             b1.Property<Guid>("IssueId")
-                                .HasColumnType("TEXT");
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
-                                .HasColumnType("INTEGER");
+                                .HasColumnType("int")
+                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                             b1.Property<DateTimeOffset>("DateAdded")
-                                .HasColumnType("TEXT");
+                                .HasColumnType("datetimeoffset");
 
                             b1.Property<string>("Description")
-                                .HasColumnType("TEXT");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("FileName")
-                                .HasColumnType("TEXT");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("IssueId", "Id");
 
@@ -225,17 +207,18 @@ namespace BTT.Infrastructure.Migrations
                     b.OwnsMany("BTT.Domain.Models.Issues.Comment", "Comments", b1 =>
                         {
                             b1.Property<Guid>("IssueId")
-                                .HasColumnType("TEXT");
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
-                                .HasColumnType("INTEGER");
+                                .HasColumnType("int")
+                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                             b1.Property<DateTimeOffset>("DateCommented")
-                                .HasColumnType("TEXT");
+                                .HasColumnType("datetimeoffset");
 
                             b1.Property<string>("Text")
-                                .HasColumnType("TEXT");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("IssueId", "Id");
 
@@ -248,6 +231,10 @@ namespace BTT.Infrastructure.Migrations
                     b.Navigation("Attachments");
 
                     b.Navigation("Comments");
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("BTT.Domain.Models.Members.Member", b =>
@@ -276,24 +263,30 @@ namespace BTT.Infrastructure.Migrations
                         .HasForeignKey("OrganizationId1");
                 });
 
-            modelBuilder.Entity("MemberProject", b =>
+            modelBuilder.Entity("BTT.Domain.Models.Projects.ProjectMember", b =>
                 {
-                    b.HasOne("BTT.Domain.Models.Members.Member", null)
-                        .WithMany()
-                        .HasForeignKey("MembersId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("BTT.Domain.Models.Members.Member", "Member")
+                        .WithMany("MemberProjects")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("BTT.Domain.Models.Projects.Project", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("BTT.Domain.Models.Projects.Project", "Project")
+                        .WithMany("ProjectMembers")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("BTT.Domain.Models.Members.Member", b =>
                 {
                     b.Navigation("Issues");
+
+                    b.Navigation("MemberProjects");
                 });
 
             modelBuilder.Entity("BTT.Domain.Models.Organizations.Organization", b =>
@@ -306,6 +299,8 @@ namespace BTT.Infrastructure.Migrations
             modelBuilder.Entity("BTT.Domain.Models.Projects.Project", b =>
                 {
                     b.Navigation("Issues");
+
+                    b.Navigation("ProjectMembers");
                 });
 #pragma warning restore 612, 618
         }
