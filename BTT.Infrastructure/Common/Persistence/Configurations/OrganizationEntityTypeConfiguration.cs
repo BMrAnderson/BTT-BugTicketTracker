@@ -17,10 +17,15 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.HasKey(o => o.Id);
 
-            builder.OwnsMany<OrganizationProject>(op => op.OrganizationProjects, p =>
-            {
-                p.WithOwner().HasForeignKey(i => i.OrganizationId);
-            });
+            builder.Property(o => o.Name).HasMaxLength(50).IsRequired();
+
+            builder.HasMany(o => o.Members);
+
+            builder.Navigation(o => o.Members).Metadata.SetField("_members");
+
+            builder.HasMany(o => o.Projects);
+
+            builder.Navigation(o => o.Projects).Metadata.SetField("_projects");
                 
         }
     }

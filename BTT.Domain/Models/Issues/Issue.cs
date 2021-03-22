@@ -14,20 +14,21 @@ namespace BTT.Domain.Models.Issues
     {
         private Issue() { }
 
-        public Issue(Member memberAssigned, Project assignedProject,
-            string title, string description, Priority priorityLevel , DateTimeOffset dueDate)
+        public Issue(Member assignedMember, Project assignedProject,
+            string title, string description, Priority priority , DateTimeOffset dueDate)
         {
-            if (memberAssigned is null)
-                throw new ArgumentNullException(nameof(memberAssigned));
+            if (assignedMember is null)
+                throw new ArgumentNullException(nameof(assignedMember));
 
          
             this.Id = Guid.NewGuid();
-            this.AssignedMemberId = memberAssigned.Id;
+            this.AssignedMemberId = assignedMember.Id;
             this.AssignedProjectId = assignedProject.Id;
             this.Title = title;
             this.Description = description;
-            this.Priority = priorityLevel;
+            this.Priority = priority;
             this.DueDate = dueDate;
+            this.DateSubmitted = DateTimeOffset.Now;
 
             _comments = new List<Comment>();
             _attachments = new List<Attachment>();
@@ -64,11 +65,6 @@ namespace BTT.Domain.Models.Issues
             AddDomainEvent(new CommentAdded(comment));
         }
 
-        public void RemoveCommentById(Guid id)
-        {
-            _comments.RemoveAll(c => c.Id == id);
-        }
-
         public void RemoveComment(Comment comment)
         {
             _comments.Remove(comment);
@@ -79,11 +75,6 @@ namespace BTT.Domain.Models.Issues
             _attachments.Add(attachment);
 
             AddDomainEvent(new AttachmentAdded(attachment));
-        }
-
-        public void RemoveAttachmentById(Guid id)
-        {
-            _attachments.RemoveAll(a => a.Id == id);
         }
 
         public void RemoveAttachment(Attachment attachment)

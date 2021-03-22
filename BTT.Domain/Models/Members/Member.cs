@@ -1,6 +1,7 @@
 ﻿using BTT.Domain.Common.Models;
 using BTT.Domain.Models.Issues;
 using BTT.Domain.Models.Notifications;
+using BTT.Domain.Models.Organizations;
 using BTT.Domain.Models.Projects;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace BTT.Domain.Models.Members
 {
     public class Member : Entity, IAggregateRoot
     {
-        public Member(string firstName, string lastName, string email, string password)
+        public Member(string firstName, string lastName, string email, string password, Organization organization)
         {
             if (string.IsNullOrEmpty(firstName)) 
                 throw new ArgumentNullException(nameof(firstName));
@@ -27,6 +28,7 @@ namespace BTT.Domain.Models.Members
                 throw new ArgumentNullException(nameof(password));          
 
             this.Id = Guid.NewGuid();
+            this.AssignedOrganizationId = organization.Id;
             this.FirstName = firstName;
             this.LastName = lastName;
             this.Email = email;
@@ -45,6 +47,7 @@ namespace BTT.Domain.Models.Members
 
         public string Password { get; private set; }
 
+        public Guid AssignedOrganizationId { get; set; }
 
         private List<Project> _projects;
         public IReadOnlyCollection<Project> Projects { 

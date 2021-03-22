@@ -8,21 +8,14 @@ using System.Threading.Tasks;
 
 namespace BTT.Domain.Models.Issues
 {
-    public class Attachment : Entity
+    public record Attachment
     {
-        public Attachment(Issue issue, Member member, string filename, string description)
+        public Attachment(string filename, string description)
         {
-            this.Id = Guid.NewGuid();
-            this.IssueId = issue.Id;
-            this.MemberId = member.Id;
             this.FileName = filename;
             this.Description = description;
             this.DateAdded = DateTimeOffset.Now;
         }
-
-        public Guid IssueId { get; private set; }
-
-        public Guid MemberId { get; private set; }
 
         public string FileName { get; private set; }
 

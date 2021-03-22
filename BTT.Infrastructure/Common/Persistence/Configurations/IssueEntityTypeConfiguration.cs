@@ -3,11 +3,6 @@ using BTT.Domain.Models.Members;
 using BTT.Domain.Models.Projects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTT.Infrastructure.Common.Persistence.Configurations
 {
@@ -19,29 +14,21 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.HasKey(i => i.Id);
 
-            builder.HasOne<Member>()
-                .WithMany()
-                .HasForeignKey(i => i.AssignedMemberId)
-                .IsRequired();
+            builder.Property(i => i.Title).HasMaxLength(50).IsRequired();
 
-            builder.HasOne<Project>()
-                .WithMany()
-                .HasForeignKey(i => i.AssignedProjectId)
-                .IsRequired();
+            builder.Property(i => i.Description).HasMaxLength(200).IsRequired();
 
-            builder.Property(i => i.Title)
-                .HasMaxLength(50)
-                .IsRequired();
+            builder.HasOne<Member>().WithMany().HasForeignKey(m => m.AssignedMemberId);
 
-            builder.Property(i => i.Description)
-                .HasMaxLength(200)
-                .IsRequired();
-
-            builder.Property(i => i.Priority);
+            builder.HasOne<Project>().WithMany().HasForeignKey(i => i.AssignedProjectId);
 
             builder.OwnsMany(i => i.Attachments);
+            
+            builder.Navigation(i => i.Attachments).Metadata.SetField("_attachments");
 
             builder.OwnsMany(i => i.Comments);
+            
+            builder.Navigation(i => i.Comments).Metadata.SetField("_comments");
         }
     }
 }

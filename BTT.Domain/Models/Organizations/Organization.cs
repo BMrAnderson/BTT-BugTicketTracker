@@ -1,4 +1,5 @@
 ﻿using BTT.Domain.Common.Models;
+using BTT.Domain.Models.Members;
 using BTT.Domain.Models.Projects;
 using System;
 using System.Collections.Generic;
@@ -15,39 +16,38 @@ namespace BTT.Domain.Models.Organizations
             this.Id = Guid.NewGuid();
             this.Name = name;
         }
-
         public string Name { get; private set; }
 
         public DateTimeOffset OrganizationStartedDate { get; private set; }
 
-        private List<OrganizationProject> _organizationProjects;
-        public IReadOnlyCollection<OrganizationProject> OrganizationProjects { 
-            get => _organizationProjects.AsReadOnly(); 
+        private List<Project> _projects;
+        public IReadOnlyCollection<Project> Projects { 
+            get => _projects.AsReadOnly(); 
         }
 
-        private List<OrganizationMember> _organizationMembers;
-        public IReadOnlyCollection<OrganizationMember> OrganizationMembers {
-            get => _organizationMembers.AsReadOnly();
+        private List<Member> _members;
+        public IReadOnlyCollection<Member> Members {
+            get => _members.AsReadOnly();
         }
 
-        public void AddOrganizationProject(OrganizationProject project)
+        public void AddOrganizationProject(Project project)
         {
-            _organizationProjects.Add(project);
+            _projects.Add(project);
         }
 
-        public void AddOrganizationMember(OrganizationMember member)
+        public void AddOrganizationMember(Member member)
         {
-            _organizationMembers.Add(member);
+            _members.Add(member);
         }
 
-        public void RemoveOrganizationProject(OrganizationProject project)
+        public void RemoveOrganizationProject(Project project)
         {
-            _organizationProjects.Remove(project);
+            _projects.Remove(project);
         }
 
-        public void RemoveOrganizationMember(OrganizationMember member)
+        public void RemoveOrganizationMember(Member member)
         {
-            _organizationMembers.Remove(member);
+            _members.Remove(member);
         }
     }
 }

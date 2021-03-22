@@ -1,4 +1,5 @@
 ﻿using BTT.Domain.Common.Models;
+using BTT.Domain.Models.Issues;
 using BTT.Domain.Models.Members;
 using BTT.Domain.Models.Organizations;
 using System;
@@ -11,24 +12,19 @@ namespace BTT.Domain.Models.Projects
 {
     public class Project : Entity, IAggregateRoot
     {
-        private Project() { }
-
-        public Project(Member owner, Organization organization, 
+        public Project(Organization organization, 
             string title, string description, DateTimeOffset dueDate )
         {
             this.Id = Guid.NewGuid();
-            this.OwnerId = owner.Id;
-            //this.OrganizationId = organization
+            this.OrganizationId = organization.Id;
             this.Title = title;
             this.Description = description;
             this.DueDate = dueDate;
             this.DateCreated = DateTimeOffset.Now;
 
-            this._projectIssues = new List<ProjectIssue>();
-            this._projectMembers = new List<ProjectMember>();
+            this._issues = new List<Issue>();
+            this._members = new List<Member>();
         }
-
-        public Guid OwnerId { get; private set; }
 
         public Guid OrganizationId { get; private set; }
 
@@ -40,34 +36,34 @@ namespace BTT.Domain.Models.Projects
 
         public DateTimeOffset DueDate { get; private set; }
 
-        private List<ProjectIssue> _projectIssues;
-        public IReadOnlyCollection<ProjectIssue> ProjectIssues {
-            get => _projectIssues.AsReadOnly(); 
+        private List<Issue> _issues;
+        public IReadOnlyCollection<Issue> Issues {
+            get => _issues.AsReadOnly(); 
         }
 
-        private List<ProjectMember> _projectMembers;
-        public IReadOnlyCollection<ProjectMember> ProjectMembers {
-            get => _projectMembers.AsReadOnly(); 
+        private List<Member> _members;
+        public IReadOnlyCollection<Member> Members {
+            get => _members.AsReadOnly(); 
         }
 
-        public void AddProjectMember(ProjectMember member)
+        public void AddProjectMember(Member member)
         {
-            _projectMembers.Add(member);
+            _members.Add(member);
         }
 
-        public void AddProjectIssue(ProjectIssue projectIssue)
+        public void AddProjectIssue(Issue issue)
         {
-            _projectIssues.Add(projectIssue);
+            _issues.Add(issue);
         }
 
-        public void RemoveProjectMember(ProjectMember member)
+        public void RemoveProjectMember(Member member)
         {
-            _projectMembers.Remove(member);
+            _members.Remove(member);
         }
 
-        public void RemoveProjectIssue(ProjectIssue issue)
+        public void RemoveProjectIssue(Issue issue)
         {
-            _projectIssues.Remove(issue);
+            _issues.Remove(issue);
         }
     }
 }

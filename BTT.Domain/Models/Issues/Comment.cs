@@ -8,18 +8,13 @@ using System.Threading.Tasks;
 
 namespace BTT.Domain.Models.Issues
 {
-    public class Comment : Entity
+    public record Comment 
     {
-        public Comment(Member member, Issue issue, string text, DateTimeOffset dateCommented)
+        public Comment(string text, DateTimeOffset dateCommented)
         {
-            this.Id = Guid.NewGuid();
-            this.IssueId = issue.Id;
             this.Text = text;
             this.DateCommented = dateCommented;
         }
-        public Guid MemberId { get; private set; }
-
-        public Guid IssueId { get; private set; }
 
         public string Text { get; private set; }
 
