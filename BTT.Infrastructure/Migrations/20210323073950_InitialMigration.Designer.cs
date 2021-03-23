@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BTT.Infrastructure.Migrations
 {
     [DbContext(typeof(IssueTicketTrackerDBContext))]
-    [Migration("20210322224054_InitialMigration")]
+    [Migration("20210323073950_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,9 +41,6 @@ namespace BTT.Infrastructure.Migrations
                     b.Property<Guid>("MemberId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MemberId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
@@ -59,7 +56,7 @@ namespace BTT.Infrastructure.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.HasIndex("MemberId1");
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Issues");
                 });
@@ -129,7 +126,9 @@ namespace BTT.Infrastructure.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTimeOffset>("DueDate")
                         .HasColumnType("datetimeoffset");
@@ -138,7 +137,9 @@ namespace BTT.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -149,10 +150,10 @@ namespace BTT.Infrastructure.Migrations
 
             modelBuilder.Entity("BTT.Domain.Models.Projects.ProjectMember", b =>
                 {
-                    b.Property<Guid?>("ProjectId")
+                    b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("MemberId")
+                    b.Property<Guid>("MemberId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ProjectId", "MemberId");
@@ -164,16 +165,16 @@ namespace BTT.Infrastructure.Migrations
 
             modelBuilder.Entity("BTT.Domain.Models.Issues.Issue", b =>
                 {
-                    b.HasOne("BTT.Domain.Models.Projects.Project", "Project")
-                        .WithMany("Issues")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("BTT.Domain.Models.Members.Member", "Member")
                         .WithMany("Issues")
-                        .HasForeignKey("MemberId1")
+                        .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BTT.Domain.Models.Projects.Project", "Project")
+                        .WithMany("Issues")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.OwnsMany("BTT.Domain.Models.Issues.Attachment", "Attachments", b1 =>
@@ -193,6 +194,7 @@ namespace BTT.Infrastructure.Migrations
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("FileName")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("IssueId", "Id");
@@ -217,7 +219,9 @@ namespace BTT.Infrastructure.Migrations
                                 .HasColumnType("datetimeoffset");
 
                             b1.Property<string>("Text")
-                                .HasColumnType("nvarchar(max)");
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("nvarchar(100)");
 
                             b1.HasKey("IssueId", "Id");
 

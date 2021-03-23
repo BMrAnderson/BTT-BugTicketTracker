@@ -1,6 +1,11 @@
-﻿namespace BTT.Domain.Common.Repository
+﻿using System;
+using System.Threading.Tasks;
+
+namespace BTT.Domain.Common.Repository
 {
-    internal interface IUnitOfWork
+    public interface IUnitOfWork : IAsyncDisposable
     {
+        Task<int> Commit();
+        void RollBack();
     }
 }

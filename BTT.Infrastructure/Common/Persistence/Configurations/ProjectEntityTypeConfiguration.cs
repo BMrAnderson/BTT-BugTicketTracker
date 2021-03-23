@@ -13,6 +13,10 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.HasKey(p => p.Id);
 
+            builder.Property(p => p.Title).HasMaxLength(50).IsRequired();
+
+            builder.Property(p => p.Description).HasMaxLength(200).IsRequired();
+
             builder.Navigation(p => p.ProjectMembers).Metadata.SetField("_projectMembers");
 
             builder.HasMany(p => p.Issues).WithOne(i => i.Project);

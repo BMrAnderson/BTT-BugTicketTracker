@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BTT.WebMVC", "BTT.WebMVC\BT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BTT.WebSPA", "BTT.WebSPA\BTT.WebSPA.csproj", "{C6AE70B0-98B0-426D-8035-745A18CDA8E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTT.Application", "BTT.Application\BTT.Application.csproj", "{ABF155D7-826E-4BC6-8056-319C3EAB84E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C6AE70B0-98B0-426D-8035-745A18CDA8E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6AE70B0-98B0-426D-8035-745A18CDA8E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6AE70B0-98B0-426D-8035-745A18CDA8E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABF155D7-826E-4BC6-8056-319C3EAB84E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABF155D7-826E-4BC6-8056-319C3EAB84E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABF155D7-826E-4BC6-8056-319C3EAB84E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABF155D7-826E-4BC6-8056-319C3EAB84E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -22,4 +22,8 @@
     <ProjectReference Include="..\BTT.Domain\BTT.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\Persistence\Data\" />
+  </ItemGroup>
+
 </Project>

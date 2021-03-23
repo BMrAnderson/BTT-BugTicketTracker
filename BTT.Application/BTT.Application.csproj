@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Enum\" />
+    <Folder Include="Common\DTOs" />
   </ItemGroup>
 
 </Project>

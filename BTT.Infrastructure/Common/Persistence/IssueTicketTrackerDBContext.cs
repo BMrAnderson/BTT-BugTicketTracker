@@ -9,8 +9,8 @@ namespace BTT.Infrastructure.Common.Persistence
 {
     public class IssueTicketTrackerDBContext : DbContext
     {
-        public IssueTicketTrackerDBContext(DbContextOptions<IssueTicketTrackerDBContext> options) : base(options)
-        {
+        public IssueTicketTrackerDBContext() : base()
+        { 
         }
 
         public DbSet<Issue> Issues { get; set; }

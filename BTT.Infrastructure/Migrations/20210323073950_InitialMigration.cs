@@ -48,8 +48,8 @@ namespace BTT.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     DateCreated = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     DueDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
@@ -75,21 +75,20 @@ namespace BTT.Infrastructure.Migrations
                     DueDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MemberId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MemberId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    MemberId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Issues", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Issues_Members_MemberId1",
-                        column: x => x.MemberId1,
+                        name: "FK_Issues_Members_MemberId",
+                        column: x => x.MemberId,
                         principalTable: "Members",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Issues_Projects_MemberId",
-                        column: x => x.MemberId,
+                        name: "FK_Issues_Projects_ProjectId",
+                        column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -126,7 +125,7 @@ namespace BTT.Infrastructure.Migrations
                     IssueId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
@@ -148,7 +147,7 @@ namespace BTT.Infrastructure.Migrations
                     IssueId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Text = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     DateCommented = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
@@ -168,9 +167,9 @@ namespace BTT.Infrastructure.Migrations
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Issues_MemberId1",
+                name: "IX_Issues_ProjectId",
                 table: "Issues",
-                column: "MemberId1");
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Members_OrganizationId",

@@ -18,15 +18,15 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.Property(i => i.Description).HasMaxLength(200).IsRequired();
 
-            builder.HasOne<Member>(i => i.Member).WithMany(m => m.Issues);
+            builder.HasOne<Member>(i => i.Member).WithMany(m => m.Issues).HasForeignKey(i => i.MemberId);
 
-            builder.HasOne<Project>(i => i.Project).WithMany(p => p.Issues).HasForeignKey(i => i.MemberId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne<Project>(i => i.Project).WithMany(p => p.Issues).HasForeignKey(i => i.ProjectId).OnDelete(DeleteBehavior.Restrict);
 
-            builder.OwnsMany(i => i.Attachments);
+            builder.OwnsMany(i => i.Attachments).Property(i => i.FileName).IsRequired();
 
             builder.Navigation(i => i.Attachments).Metadata.SetField("_attachments");
 
-            builder.OwnsMany(i => i.Comments);
+            builder.OwnsMany(i => i.Comments).Property(c => c.Text).HasMaxLength(100).IsRequired();
 
             builder.Navigation(i => i.Comments).Metadata.SetField("_comments");
         }

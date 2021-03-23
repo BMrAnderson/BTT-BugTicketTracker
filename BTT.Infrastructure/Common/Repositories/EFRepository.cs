@@ -1,44 +1,53 @@
 ﻿using BTT.Domain.Common.Models;
 using BTT.Domain.Common.Repository;
+using BTT.Domain.Common.Specification;
 using BTT.Infrastructure.Common.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BTT.Infrastructure.Domain.Repositories
 {
-    public class EFRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
+    public class EFRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly IDbContext Context;
+        private readonly DbContext _context;
+        private readonly DbSet<TEntity> _entities;
 
-        private readonly DbSet<TEntity> _dbSet;
-
-        public EFRepository(IDbContext dbContext)
+        public EFRepository(DbContext dbContext)
         {
-            this.Context = dbContext;
-
-            _dbSet = dbContext != null ? Context.Set<TEntity>()
-                : throw new ArgumentNullException(nameof(dbContext));
+            _context = dbContext;
+            _entities = dbContext.Set<TEntity>();
         }
 
         public void Add(TEntity entity)
         {
-            _dbSet.Add(entity);
+            _entities.Add(entity);
+        }
+
+        public IEnumerable<TEntity> Find(ISpecification<TEntity> spec)
+        {
+            return _entities.AsNoTracking().Where(spec.IsSatisfiedBy);
         }
 
         public TEntity FindById(Guid id)
         {
-            return _dbSet.Find((object)id);
+            return _entities.Find(id);
+        }
+
+        public TEntity FindOne(ISpecification<TEntity> spec)
+        {
+            return _entities.AsNoTracking().Where(spec.IsSatisfiedBy).FirstOrDefault();
         }
 
         public IEnumerable<TEntity> GetAll()
         {
-            return _dbSet.AsNoTracking<TEntity>();
+            return _entities.AsNoTracking<TEntity>();
         }
 
         public void Remove(TEntity entity)
         {
-            _dbSet.Remove(entity);
+           _entities.Remove(entity);
         }
     }
 }
