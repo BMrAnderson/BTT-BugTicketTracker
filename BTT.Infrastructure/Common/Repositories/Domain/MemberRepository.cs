@@ -4,9 +4,6 @@ using BTT.Domain.Models.Members;
 using BTT.Infrastructure.Domain.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTT.Infrastructure.Common.Repositories
 {
@@ -26,7 +23,7 @@ namespace BTT.Infrastructure.Common.Repositories
 
         public Member FindById(Guid id)
         {
-           return _efMemberRepository.FindById(id);
+            return _efMemberRepository.FindById(id);
         }
 
         public Member FindOne(ISpecification<Member> spec)

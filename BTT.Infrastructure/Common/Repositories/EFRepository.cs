@@ -47,7 +47,7 @@ namespace BTT.Infrastructure.Domain.Repositories
 
         public void Remove(TEntity entity)
         {
-           _entities.Remove(entity);
+            _entities.Remove(entity);
         }
     }
 }

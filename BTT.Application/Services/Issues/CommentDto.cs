@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTT.Application.Services.Issues
 {
@@ -13,4 +9,3 @@ namespace BTT.Application.Services.Issues
         public DateTime DateCommented { get; set; }
     }
 }
-      

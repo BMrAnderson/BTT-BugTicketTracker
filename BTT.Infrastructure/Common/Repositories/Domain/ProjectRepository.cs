@@ -4,9 +4,6 @@ using BTT.Domain.Models.Projects;
 using BTT.Infrastructure.Domain.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTT.Infrastructure.Common.Repositories
 {

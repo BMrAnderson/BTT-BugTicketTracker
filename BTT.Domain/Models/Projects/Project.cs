@@ -1,4 +1,5 @@
 ﻿using BTT.Domain.Common.Models;
+using BTT.Domain.Contracts;
 using BTT.Domain.Models.Issues;
 using BTT.Domain.Models.Organizations;
 using System;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 
 namespace BTT.Domain.Models.Projects
 {
-    public class Project : Entity, IAggregateRoot
+    public class Project : Entity, IAggregateRoot, IRangeableDateTime, IMutableDetail
     {
         private Project()
         {
@@ -27,7 +28,7 @@ namespace BTT.Domain.Models.Projects
             this.Organization = organization;
             this.Title = title;
             this.Description = description;
-            this.DueDate = dueDate;
+            this.EndDueDate = dueDate;
             this.DateCreated = DateTime.Now;
 
             this._issues = new List<Issue>();
@@ -44,7 +45,7 @@ namespace BTT.Domain.Models.Projects
 
         public DateTime DateCreated { get; private set; }
 
-        public DateTime DueDate { get; private set; }
+        public DateTime EndDueDate { get; private set; }
 
         private readonly List<Issue> _issues;
 
@@ -58,6 +59,27 @@ namespace BTT.Domain.Models.Projects
         public virtual IReadOnlyCollection<ProjectMember> ProjectMembers
         {
             get => _projectMembers.AsReadOnly();
+        }
+
+        public void ChangeName(string title)
+        {
+            if (string.IsNullOrEmpty(title))
+                throw new ArgumentNullException(nameof(title));
+
+            this.Title = title;
+        }
+
+        public void ChangeDescription(string description)
+        {
+            if (string.IsNullOrEmpty(description))
+                throw new ArgumentNullException(nameof(description));
+
+            this.Description = description;
+        }
+
+        public void ChangeDueDate(DateTime dueDate)
+        {
+            this.EndDueDate = dueDate;
         }
 
         public void AddProjectMember(ProjectMember member)
@@ -78,6 +100,12 @@ namespace BTT.Domain.Models.Projects
         public void RemoveProjectIssue(Issue issue)
         {
             _issues.Remove(issue);
+        }
+
+        private void ThrowOnNullOrEmptyString(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                throw new ArgumentNullException(nameof(data));
         }
     }
 }

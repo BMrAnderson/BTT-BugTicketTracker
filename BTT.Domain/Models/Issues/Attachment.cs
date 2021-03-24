@@ -1,8 +1,9 @@
-﻿using System;
+﻿using BTT.Domain.Contracts;
+using System;
 
 namespace BTT.Domain.Models.Issues
 {
-    public record Attachment
+    public record Attachment : IDateTime, IMutableDetail
     {
         private Attachment() { }
 
@@ -15,23 +16,23 @@ namespace BTT.Domain.Models.Issues
 
             this.FileName = filename;
             this.Description = description;
-            this.DateAdded = DateTime.Now;
+            this.DateCreated = DateTime.Now;
         }
 
         public string FileName { get; private set; }
 
         public string Description { get; private set; }
 
-        public DateTime DateAdded { get; private set; }
-
-        public void ChangeFileName(string filename)
-        {
-            FileName = filename;
-        }
+        public DateTime DateCreated { get; private set; }
 
         public void ChangeDescription(string description)
         {
-            Description = description;
+            this.Description = description;
+        }
+
+        public void ChangeName(string name)
+        {
+            this.FileName = name;
         }
     }
 }

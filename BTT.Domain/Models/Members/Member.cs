@@ -5,9 +5,6 @@ using BTT.Domain.Models.Organizations;
 using BTT.Domain.Models.Projects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTT.Domain.Models.Members
 {
@@ -57,13 +54,15 @@ namespace BTT.Domain.Models.Members
 
         private readonly List<ProjectMember> _memberProjects;
 
-        public virtual IReadOnlyCollection<ProjectMember> MemberProjects {
+        public virtual IReadOnlyCollection<ProjectMember> MemberProjects
+        {
             get => _memberProjects.AsReadOnly();
         }
 
         private readonly List<Issue> _issues;
 
-        public virtual IReadOnlyCollection<Issue> Issues {
+        public virtual IReadOnlyCollection<Issue> Issues
+        {
             get => _issues.AsReadOnly();
         }
 
@@ -106,7 +105,7 @@ namespace BTT.Domain.Models.Members
 
         public void RemoveNotification(BaseNotification notification)
         {
-           // _notifications.Remove(notification);
+            // _notifications.Remove(notification);
         }
     }
 }
