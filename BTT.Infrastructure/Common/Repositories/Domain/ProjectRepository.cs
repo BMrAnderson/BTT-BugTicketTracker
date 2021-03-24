@@ -1,4 +1,5 @@
-﻿using BTT.Domain.Common.Specification;
+﻿using BTT.Domain.Common.Repository;
+using BTT.Domain.Common.Specification;
 using BTT.Domain.Models.Projects;
 using BTT.Infrastructure.Domain.Repositories;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BTT.Infrastructure.Common.Repositories
 {
-    public class ProjectRepository : IProjectRepository
+    public class ProjectRepository : IRepository<Project>
     {
         private readonly EFRepository<Project> _efProjectRepository;
 
@@ -36,11 +37,6 @@ namespace BTT.Infrastructure.Common.Repositories
         public IEnumerable<Project> GetAll()
         {
             return _efProjectRepository.GetAll();
-        }
-
-        public IEnumerable<Project> GetProjectsByOrganizationId(Guid id)
-        {
-            return _efProjectRepository.GetAll().Where(p => p.Id == id);
         }
 
         public void Remove(Project entity)

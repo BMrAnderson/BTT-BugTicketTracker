@@ -6,14 +6,17 @@ namespace BTT.Domain.Models.Issues
     {
         private Comment() { }
 
-        public Comment(string text, DateTimeOffset dateCommented)
+        public Comment(string text, DateTime dateCommented)
         {
+            if (string.IsNullOrEmpty(text))
+                throw new ArgumentNullException(nameof(text));
+
             this.Text = text;
             this.DateCommented = dateCommented;
         }
 
         public string Text { get; private set; }
 
-        public DateTimeOffset DateCommented { get; private set; }
+        public DateTime DateCommented { get; private set; }
     }
 }

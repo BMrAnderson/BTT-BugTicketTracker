@@ -6,6 +6,6 @@ namespace BTT.Domain.Common.Events
     {
         public Guid EventId { get; }
 
-        public DateTimeOffset EventDateOccured { get; }
+        public DateTime EventDateOccured { get; }
     }
 }

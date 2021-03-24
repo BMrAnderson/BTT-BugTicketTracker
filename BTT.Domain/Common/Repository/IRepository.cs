@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BTT.Domain.Common.Repository
 {
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IRepository<TEntity> where TEntity : IAggregateRoot
     {
         TEntity FindById(Guid id);
         IEnumerable<TEntity> GetAll();

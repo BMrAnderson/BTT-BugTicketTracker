@@ -1,4 +1,5 @@
-﻿using BTT.Domain.Common.Specification;
+﻿using BTT.Domain.Common.Repository;
+using BTT.Domain.Common.Specification;
 using BTT.Domain.Models.Members;
 using BTT.Infrastructure.Domain.Repositories;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BTT.Infrastructure.Common.Repositories
 {
-    public class MemberRepository : IMemberRepository
+    public class MemberRepository : IRepository<Member>
     {
         private readonly EFRepository<Member> _efMemberRepository;
 
@@ -36,12 +37,6 @@ namespace BTT.Infrastructure.Common.Repositories
         public IEnumerable<Member> GetAll()
         {
             return _efMemberRepository.GetAll();
-        }
-
-        public Member GetMemberByEmail(string email)
-        {
-            return _efMemberRepository.GetAll()
-                .Where(m => m.Email == email).FirstOrDefault();
         }
 
         public void Remove(Member entity)

@@ -10,9 +10,9 @@ namespace BTT.Domain.Models.Issues
 {
     public class IssueAfterDueDateSpecification : BaseSpecification<Issue>
     {
-        readonly DateTimeOffset dueDate;
+        readonly DateTime dueDate;
 
-        public IssueAfterDueDateSpecification(DateTimeOffset dueDate) => this.dueDate = dueDate;
+        public IssueAfterDueDateSpecification(DateTime dueDate) => this.dueDate = dueDate;
 
         public override Expression<Func<Issue, bool>> SpecExpression
         {

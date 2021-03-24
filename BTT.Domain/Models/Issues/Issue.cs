@@ -13,10 +13,16 @@ namespace BTT.Domain.Models.Issues
         }
 
         public Issue(Member assignedMember, Project assignedProject,
-            string title, string description, Priority priority, DateTimeOffset dueDate)
+            string title, string description, Priority priority, DateTime dueDate)
         {
             if (assignedMember is null)
                 throw new ArgumentNullException(nameof(assignedMember));
+            if (assignedProject is null)
+                throw new ArgumentNullException(nameof(assignedProject));
+            if (string.IsNullOrEmpty(title))
+                throw new ArgumentNullException(nameof(title));
+            if (string.IsNullOrEmpty(description))
+                throw new ArgumentNullException(nameof(description));
 
             this.Id = Guid.NewGuid();
             this.ProjectId = assignedProject.Id;
@@ -27,7 +33,7 @@ namespace BTT.Domain.Models.Issues
             this.Description = description;
             this.Priority = priority;
             this.DueDate = dueDate;
-            this.DateSubmitted = DateTimeOffset.Now;
+            this.DateSubmitted = DateTime.Now;
 
             _comments = new List<Comment>();
             _attachments = new List<Attachment>();
@@ -37,9 +43,9 @@ namespace BTT.Domain.Models.Issues
 
         public string Description { get; private set; }
 
-        public DateTimeOffset DateSubmitted { get; private set; }
+        public DateTime DateSubmitted { get; private set; }
 
-        public DateTimeOffset DueDate { get; private set; }
+        public DateTime DueDate { get; private set; }
 
         public Priority Priority { get; private set; }
 

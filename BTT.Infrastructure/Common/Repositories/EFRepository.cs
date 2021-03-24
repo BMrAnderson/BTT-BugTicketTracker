@@ -9,12 +9,12 @@ using System.Linq;
 
 namespace BTT.Infrastructure.Domain.Repositories
 {
-    public class EFRepository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class EFRepository<TEntity> : IRepository<TEntity> where TEntity : class, IAggregateRoot
     {
-        private readonly DbContext _context;
+        private readonly IssueTicketTrackerDBContext _context;
         private readonly DbSet<TEntity> _entities;
 
-        public EFRepository(DbContext dbContext)
+        public EFRepository(IssueTicketTrackerDBContext dbContext)
         {
             _context = dbContext;
             _entities = dbContext.Set<TEntity>();

@@ -25,16 +25,16 @@ namespace BTT.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("DateSubmitted")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("DateSubmitted")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTimeOffset>("DueDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("MemberId")
                         .HasColumnType("uniqueidentifier");
@@ -106,8 +106,8 @@ namespace BTT.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTimeOffset>("OrganizationStartedDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("OrganizationStartedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -120,16 +120,16 @@ namespace BTT.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("DateCreated")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTimeOffset>("DueDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("OrganizationId")
                         .HasColumnType("uniqueidentifier");
@@ -185,10 +185,11 @@ namespace BTT.Infrastructure.Migrations
                                 .HasColumnType("int")
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                            b1.Property<DateTimeOffset>("DateAdded")
-                                .HasColumnType("datetimeoffset");
+                            b1.Property<DateTime>("DateAdded")
+                                .HasColumnType("datetime2");
 
                             b1.Property<string>("Description")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("FileName")
@@ -213,8 +214,8 @@ namespace BTT.Infrastructure.Migrations
                                 .HasColumnType("int")
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                            b1.Property<DateTimeOffset>("DateCommented")
-                                .HasColumnType("datetimeoffset");
+                            b1.Property<DateTime>("DateCommented")
+                                .HasColumnType("datetime2");
 
                             b1.Property<string>("Text")
                                 .IsRequired()

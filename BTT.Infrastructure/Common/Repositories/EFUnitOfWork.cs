@@ -12,26 +12,26 @@ namespace BTT.Infrastructure.Common.Repositories
 {
     public class EFUnitOfWork : IUnitOfWork
     {
-        DbContext context;
+        private readonly IssueTicketTrackerDBContext _context; 
 
-        public EFUnitOfWork()
+        public EFUnitOfWork(IssueTicketTrackerDBContext context)
         {
-            context = new IssueTicketTrackerDBContext();
+            _context = context;
         }
 
         public async Task<int> Commit()
         {
-           return await context.SaveChangesAsync();
+           return await _context.SaveChangesAsync();
         }
 
         public ValueTask DisposeAsync()
         {
-           return context.DisposeAsync();
+           return _context.DisposeAsync();
         }
 
         public void RollBack()
         {
-            context.Database.RollbackTransaction();
+            _context.Database.RollbackTransaction();
         }
     }
 }

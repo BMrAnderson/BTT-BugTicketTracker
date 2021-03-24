@@ -14,8 +14,12 @@ namespace BTT.Domain.Models.Organizations
 
         public Organization(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+
             this.Id = Guid.NewGuid();
             this.Name = name;
+            this.OrganizationStartedDate = DateTime.Now;
 
             _members = new List<Member>();
             _projects = new List<Project>();
@@ -23,7 +27,7 @@ namespace BTT.Domain.Models.Organizations
 
         public string Name { get; private set; }
 
-        public DateTimeOffset OrganizationStartedDate { get; private set; }
+        public DateTime OrganizationStartedDate { get; private set; }
 
         private readonly List<Project> _projects;
 

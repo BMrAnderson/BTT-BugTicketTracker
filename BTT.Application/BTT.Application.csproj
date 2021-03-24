@@ -5,7 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Common\DTOs" />
+    <Compile Remove="Common\DTOs\**" />
+    <EmbeddedResource Remove="Common\DTOs\**" />
+    <None Remove="Common\DTOs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BTT.Domain\BTT.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BTT.Infrastructure.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class IntialTestMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace BTT.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    OrganizationStartedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    OrganizationStartedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,8 +50,8 @@ namespace BTT.Infrastructure.Migrations
                     OrganizationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DateCreated = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    DueDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,8 +71,8 @@ namespace BTT.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DateSubmitted = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    DueDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    DateSubmitted = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MemberId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -126,8 +126,8 @@ namespace BTT.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -148,7 +148,7 @@ namespace BTT.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    DateCommented = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    DateCommented = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

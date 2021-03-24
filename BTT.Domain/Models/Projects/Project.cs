@@ -13,15 +13,22 @@ namespace BTT.Domain.Models.Projects
         }
 
         public Project(Organization organization,
-            string title, string description, DateTimeOffset dueDate)
+            string title, string description, DateTime dueDate)
         {
+            if (organization is null)
+                throw new ArgumentNullException(nameof(organization));
+            if (string.IsNullOrEmpty(title))
+                throw new ArgumentNullException(nameof(title));
+            if (string.IsNullOrEmpty(description))
+                throw new ArgumentNullException(nameof(description));
+
             this.Id = Guid.NewGuid();
             this.OrganizationId = organization.Id;
             this.Organization = organization;
             this.Title = title;
             this.Description = description;
             this.DueDate = dueDate;
-            this.DateCreated = DateTimeOffset.Now;
+            this.DateCreated = DateTime.Now;
 
             this._issues = new List<Issue>();
             this._projectMembers = new List<ProjectMember>();
@@ -35,9 +42,9 @@ namespace BTT.Domain.Models.Projects
 
         public string Description { get; private set; }
 
-        public DateTimeOffset DateCreated { get; private set; }
+        public DateTime DateCreated { get; private set; }
 
-        public DateTimeOffset DueDate { get; private set; }
+        public DateTime DueDate { get; private set; }
 
         private readonly List<Issue> _issues;
 

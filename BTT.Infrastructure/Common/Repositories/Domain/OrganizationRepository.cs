@@ -1,4 +1,5 @@
-﻿using BTT.Domain.Common.Specification;
+﻿using BTT.Domain.Common.Repository;
+using BTT.Domain.Common.Specification;
 using BTT.Domain.Models.Organizations;
 using BTT.Infrastructure.Domain.Repositories;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BTT.Infrastructure.Common.Repositories
 {
-    public class OrganizationRepository : IOrganizationRepository
+    public class OrganizationRepository : IRepository<Organization>
     {
         private readonly EFRepository<Organization> _efOrganizationRepository;
 
@@ -38,16 +39,9 @@ namespace BTT.Infrastructure.Common.Repositories
             return _efOrganizationRepository.GetAll();
         }
 
-        public Organization GetOrganizationByName(string name)
-        {
-            var spec = new OrganizationHasNameSpecification(name);
-
-            return _efOrganizationRepository.FindOne(spec);
-        }
-
         public void Remove(Organization entity)
         {
-            throw new NotImplementedException();
+            _efOrganizationRepository.Remove(entity);
         }
     }
 }

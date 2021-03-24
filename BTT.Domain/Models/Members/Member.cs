@@ -21,15 +21,14 @@ namespace BTT.Domain.Models.Members
         {
             if (string.IsNullOrEmpty(firstName))
                 throw new ArgumentNullException(nameof(firstName));
-
             if (string.IsNullOrEmpty(lastName))
                 throw new ArgumentNullException(nameof(lastName));
-
             if (string.IsNullOrEmpty(email))
                 throw new ArgumentNullException(nameof(email));
-
             if (string.IsNullOrEmpty(password))
                 throw new ArgumentNullException(nameof(password));
+            if (organization is null)
+                throw new ArgumentNullException(nameof(organization));
 
             this.Id = Guid.NewGuid();
             this.OrganizationId = organization.Id;

@@ -24,6 +24,8 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.OwnsMany(i => i.Attachments).Property(i => i.FileName).IsRequired();
 
+            builder.OwnsMany(i => i.Attachments).Property(i => i.Description).IsRequired();
+
             builder.Navigation(i => i.Attachments).Metadata.SetField("_attachments");
 
             builder.OwnsMany(i => i.Comments).Property(c => c.Text).HasMaxLength(100).IsRequired();

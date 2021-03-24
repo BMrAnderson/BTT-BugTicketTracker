@@ -7,7 +7,7 @@ namespace BTT.Domain.Models.Members
     {
         public Guid EventId { get; }
 
-        public DateTimeOffset EventDateOccured { get; }
+        public DateTime EventDateOccured { get; }
 
         public Member Member { get; }
 
@@ -15,7 +15,7 @@ namespace BTT.Domain.Models.Members
         {
             this.Member = member;
             this.EventId = Guid.NewGuid();
-            this.EventDateOccured = DateTimeOffset.Now;
+            this.EventDateOccured = DateTime.Now;
         }
     }
 }

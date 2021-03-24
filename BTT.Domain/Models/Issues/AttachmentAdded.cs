@@ -7,7 +7,7 @@ namespace BTT.Domain.Models.Issues
     {
         public Guid EventId { get; }
 
-        public DateTimeOffset EventDateOccured { get; }
+        public DateTime EventDateOccured { get; }
 
         public Attachment Attachment { get; }
 
@@ -15,7 +15,7 @@ namespace BTT.Domain.Models.Issues
         {
             this.Attachment = attachment;
             this.EventId = Guid.NewGuid();
-            this.EventDateOccured = DateTimeOffset.Now;
+            this.EventDateOccured = DateTime.Now;
         }
     }
 }
