@@ -1,4 +1,5 @@
-﻿using BTT.Domain.Common.Models;
+﻿using BTT.Domain.Common.Extensions;
+using BTT.Domain.Common.Models;
 using BTT.Domain.Contracts;
 using BTT.Domain.Models.Issues;
 using BTT.Domain.Models.Organizations;
@@ -9,19 +10,16 @@ namespace BTT.Domain.Models.Projects
 {
     public class Project : Entity, IAggregateRoot, IRangeableDateTime, IMutableDetail
     {
-        private Project()
-        {
-        }
+        private readonly List<Issue> _issues;
+
+        private readonly List<ProjectMember> _projectMembers;
 
         public Project(Organization organization,
             string title, string description, DateTime dueDate)
         {
-            if (organization is null)
-                throw new ArgumentNullException(nameof(organization));
-            if (string.IsNullOrEmpty(title))
-                throw new ArgumentNullException(nameof(title));
-            if (string.IsNullOrEmpty(description))
-                throw new ArgumentNullException(nameof(description));
+            title.CheckNull(nameof(title));
+            organization.CheckNull(nameof(organization));
+            description.CheckNull(nameof(description));
 
             this.Id = Guid.NewGuid();
             this.OrganizationId = organization.Id;
@@ -35,44 +33,45 @@ namespace BTT.Domain.Models.Projects
             this._projectMembers = new List<ProjectMember>();
         }
 
+        private Project()
+        {
+        }
+
         public virtual Organization Organization { get; private set; }
 
         public Guid OrganizationId { get; private set; }
 
+        public DateTime DateCreated { get; private set; }
+
         public string Title { get; private set; }
 
         public string Description { get; private set; }
-
-        public DateTime DateCreated { get; private set; }
-
+        
         public DateTime EndDueDate { get; private set; }
-
-        private readonly List<Issue> _issues;
 
         public virtual IReadOnlyCollection<Issue> Issues
         {
             get => _issues.AsReadOnly();
         }
 
-        private readonly List<ProjectMember> _projectMembers;
-
         public virtual IReadOnlyCollection<ProjectMember> ProjectMembers
         {
             get => _projectMembers.AsReadOnly();
         }
 
-        public void ChangeName(string title)
+        public void AddProjectIssue(Issue issue)
         {
-            if (string.IsNullOrEmpty(title))
-                throw new ArgumentNullException(nameof(title));
+            _issues.Add(issue);
+        }
 
-            this.Title = title;
+        public void AddProjectMember(ProjectMember member)
+        {
+            _projectMembers.Add(member);
         }
 
         public void ChangeDescription(string description)
         {
-            if (string.IsNullOrEmpty(description))
-                throw new ArgumentNullException(nameof(description));
+            description.CheckNull(nameof(description));
 
             this.Description = description;
         }
@@ -82,30 +81,20 @@ namespace BTT.Domain.Models.Projects
             this.EndDueDate = dueDate;
         }
 
-        public void AddProjectMember(ProjectMember member)
+        public void ChangeName(string title)
         {
-            _projectMembers.Add(member);
-        }
+            title.CheckNull(nameof(title));
 
-        public void AddProjectIssue(Issue issue)
-        {
-            _issues.Add(issue);
+            this.Title = title;
         }
-
-        public void RemoveProjectMember(ProjectMember member)
-        {
-            _projectMembers.Remove(member);
-        }
-
         public void RemoveProjectIssue(Issue issue)
         {
             _issues.Remove(issue);
         }
 
-        private void ThrowOnNullOrEmptyString(string data)
+        public void RemoveProjectMember(ProjectMember member)
         {
-            if (string.IsNullOrEmpty(data))
-                throw new ArgumentNullException(nameof(data));
+            _projectMembers.Remove(member);
         }
     }
 }

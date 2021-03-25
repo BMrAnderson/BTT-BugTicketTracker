@@ -1,31 +1,27 @@
-﻿using BTT.Domain.Common.Models;
+﻿using BTT.Domain.Common.Extensions;
+using BTT.Domain.Common.Models;
+using BTT.Domain.Exceptions;
+using BTT.Domain.Models.Email;
 using BTT.Domain.Models.Issues;
 using BTT.Domain.Models.Notifications;
 using BTT.Domain.Models.Organizations;
 using BTT.Domain.Models.Projects;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace BTT.Domain.Models.Members
 {
     public class Member : Entity, IAggregateRoot
     {
-        private Member()
-        {
-        }
+        private readonly List<Issue> _issues;
+
+        private readonly List<ProjectMember> _memberProjects;
+
+        private readonly List<BaseDomainNotification> _notifications;
 
         public Member(string firstName, string lastName, string email, string password, Organization organization)
         {
-            if (string.IsNullOrEmpty(firstName))
-                throw new ArgumentNullException(nameof(firstName));
-            if (string.IsNullOrEmpty(lastName))
-                throw new ArgumentNullException(nameof(lastName));
-            if (string.IsNullOrEmpty(email))
-                throw new ArgumentNullException(nameof(email));
-            if (string.IsNullOrEmpty(password))
-                throw new ArgumentNullException(nameof(password));
-            if (organization is null)
-                throw new ArgumentNullException(nameof(organization));
 
             this.Id = Guid.NewGuid();
             this.OrganizationId = organization.Id;
@@ -40,36 +36,54 @@ namespace BTT.Domain.Models.Members
             //_notifications = new List<BaseNotification>();
         }
 
-        public string FirstName { get; private set; }
-
-        public string LastName { get; private set; }
+        private Member() {}
 
         public string Email { get; private set; }
-
+        
+        public string FirstName { get; private set; }
+        
+        public string LastName { get; private set; }
+        
         public string Password { get; private set; }
-
-        public Guid OrganizationId { get; private set; }
 
         public virtual Organization Organization { get; private set; }
 
-        private readonly List<ProjectMember> _memberProjects;
-
-        public virtual IReadOnlyCollection<ProjectMember> MemberProjects
-        {
-            get => _memberProjects.AsReadOnly();
-        }
-
-        private readonly List<Issue> _issues;
+        public Guid OrganizationId { get; private set; }
 
         public virtual IReadOnlyCollection<Issue> Issues
         {
             get => _issues.AsReadOnly();
         }
+        
+        public virtual IReadOnlyCollection<ProjectMember> MemberProjects
+        {
+            get => _memberProjects.AsReadOnly();
+        }
+    
+        public virtual IReadOnlyCollection<BaseDomainNotification> Notifications
+        {
+            get => _notifications.AsReadOnly();
+        }
 
-        //private List<BaseNotification> _notifications;
-        //public IReadOnlyCollection<BaseNotification> Notifications {
-        //    get => _notifications.AsReadOnly();
-        //}
+        public void AddIssue(Issue issue)
+        {
+            _issues.Add(issue);
+        }
+
+        public void RemoveIssue(Issue issue)
+        {
+            _issues.Remove(issue);
+        }
+
+        public void AddNotification(BaseDomainNotification notification)
+        {
+            _notifications.Add(notification);
+        }
+
+        public void RemoveNotification(BaseDomainNotification notification)
+        {
+            _notifications.Remove(notification);
+        }
 
         public void AddProject(ProjectMember project)
         {
@@ -83,29 +97,24 @@ namespace BTT.Domain.Models.Members
             _memberProjects.Remove(project);
         }
 
-        //public void RemoveProjectById(Guid id)
-        //{
-        //    _projects.RemoveAll(p => p.Id == id);
-        //}
-
-        public void AddIssue(Issue issue)
+        private void ValidateArgs(string firstName, string lastName, string email, string password, Organization organization)
         {
-            _issues.Add(issue);
+            firstName.CheckNull(nameof(firstName));
+            lastName.CheckNull(nameof(lastName));
+            email.CheckNull(nameof(email));
+            password.CheckNull(nameof(password));
+            organization.CheckNull(nameof(organization));     
         }
 
-        public void RemoveIssue(Issue issue)
+        private void ValidateEmail(string email)
         {
-            _issues.Remove(issue);
+            string pattern = EmailConstants.EmailRegexPattern;
+
+            var regex = new Regex(pattern);
+
+            email.ThrowIfConditionNotMet<InvalidMemberException>
+                ("Member email was not valid.", e => regex.IsMatch(email));
         }
 
-        public void AddNotification(BaseNotification notification)
-        {
-            //_notifications.Add(notification);
-        }
-
-        public void RemoveNotification(BaseNotification notification)
-        {
-            // _notifications.Remove(notification);
-        }
     }
 }

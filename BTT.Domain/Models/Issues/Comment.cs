@@ -1,8 +1,9 @@
-﻿using System;
+﻿using BTT.Domain.Contracts;
+using System;
 
 namespace BTT.Domain.Models.Issues
 {
-    public record Comment
+    public record Comment : IDateTime
     {
         private Comment() { }
 
@@ -12,11 +13,11 @@ namespace BTT.Domain.Models.Issues
                 throw new ArgumentNullException(nameof(text));
 
             this.Text = text;
-            this.DateCommented = dateCommented;
+            this.DateCreated = dateCommented;
         }
 
         public string Text { get; private set; }
 
-        public DateTime DateCommented { get; private set; }
+        public DateTime DateCreated { get; private set; }
     }
 }

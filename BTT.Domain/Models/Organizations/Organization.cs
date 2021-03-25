@@ -1,4 +1,6 @@
-﻿using BTT.Domain.Common.Models;
+﻿using BTT.Domain.Common.Extensions;
+using BTT.Domain.Common.Models;
+using BTT.Domain.Contracts;
 using BTT.Domain.Models.Members;
 using BTT.Domain.Models.Projects;
 using System;
@@ -6,61 +8,67 @@ using System.Collections.Generic;
 
 namespace BTT.Domain.Models.Organizations
 {
-    public class Organization : Entity, IAggregateRoot
+    public class Organization : Entity, IAggregateRoot, IDateTime
     {
-        private Organization()
-        {
-        }
+        private readonly List<Member> _members;
+
+        private readonly List<Project> _projects;
 
         public Organization(string name)
         {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException(nameof(name));
+            name.CheckNull(nameof(name));
 
             this.Id = Guid.NewGuid();
             this.Name = name;
-            this.OrganizationStartedDate = DateTime.Now;
+            this.DateCreated = DateTime.Now;
 
             _members = new List<Member>();
             _projects = new List<Project>();
         }
 
-        public string Name { get; private set; }
-
-        public DateTime OrganizationStartedDate { get; private set; }
-
-        private readonly List<Project> _projects;
-
-        public virtual IReadOnlyCollection<Project> Projects
+        private Organization()
         {
-            get => _projects.AsReadOnly();
         }
-
-        private readonly List<Member> _members;
-
+        
+        public string Name { get; private set; }
+        
+        public DateTime DateCreated { get; private set; }
+        
         public virtual IReadOnlyCollection<Member> Members
         {
             get => _members.AsReadOnly();
         }
 
-        public void AddOrganizationProject(Project project)
+        public virtual IReadOnlyCollection<Project> Projects
         {
-            _projects.Add(project);
+            get => _projects.AsReadOnly();
         }
-
+    
         public void AddOrganizationMember(Member member)
         {
+            member.CheckNull(nameof(member));
+
             _members.Add(member);
+        }
+
+        public void AddOrganizationProject(Project project)
+        {
+            project.CheckNull(nameof(project));
+
+            _projects.Add(project);
+        }
+        public void RemoveOrganizationMember(Member member)
+        {
+            member.CheckNull(nameof(member));
+
+            _members.Remove(member);
         }
 
         public void RemoveOrganizationProject(Project project)
         {
-            _projects.Remove(project);
-        }
+            project.CheckNull(nameof(project));
 
-        public void RemoveOrganizationMember(Member member)
-        {
-            _members.Remove(member);
+            _projects.Remove(project);
         }
     }
 }

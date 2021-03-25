@@ -18,14 +18,6 @@ namespace BTT.Domain.Common.Extensions
             }
         }
 
-        public static void CheckNull(this object data, string paramName = "Value")
-        {
-            if (data is null)
-            {
-                throw new ArgumentNullException(paramName);
-            }
-        }
-
         public static void CheckNull<T>(this T obj, string paramName = "Value") 
             where T : IAggregateRoot, IEntity
         {
@@ -44,15 +36,6 @@ namespace BTT.Domain.Common.Extensions
             } 
         }
 
-        public static void ThrowIfConditionNotMet<TException>(this object data, string message, Predicate<object> condition)
-            where TException : BaseDomainException, new()
-        {
-            if (condition.Invoke(data) != true)
-            {
-                ThrowException<TException>(message);
-            }
-        }
-
         public static void ThrowIfConditionNotMet<TExeption>(this string data, string message, Predicate<string> condition)
             where TExeption : BaseDomainException, new()
         {
@@ -62,7 +45,8 @@ namespace BTT.Domain.Common.Extensions
             }
         }
 
-        private static void ThrowException<TException>(string errorMessage) where TException : BaseDomainException, new()
+        private static void ThrowException<TException>(string errorMessage) 
+            where TException : BaseDomainException, new()
         {
             throw new TException { Error = errorMessage };
         }

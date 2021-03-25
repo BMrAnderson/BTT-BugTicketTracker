@@ -1,4 +1,5 @@
 ﻿using BTT.Domain.Common.Specification;
+using BTT.Domain.Models.Members;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace BTT.Domain.Models.Issues
 {
-    public class IssueByPrioritySpecification : BaseSpecification<Issue>
+    public class IssueByMemberSpecification : BaseSpecification<Issue>
     {
-        private Priority _priority;
+        private Guid _memberId;
 
-        public IssueByPrioritySpecification(Priority priority)
+        public IssueByMemberSpecification(Guid memberId)
         {
-            this._priority = priority;
+            this._memberId = memberId;
         }
 
         public override Expression<Func<Issue, bool>> SpecExpression
         {
-            get => issue => issue.Priority == _priority;
+            get => issue => issue.MemberId == _memberId;
         }
     }
 }

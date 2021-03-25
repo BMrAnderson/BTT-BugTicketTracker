@@ -7,13 +7,13 @@ namespace BTT.Domain.Models.Issues
 {
     public class IssueInProjectSpecification : BaseSpecification<Issue>
     {
-        private readonly Project project;
+        private readonly Guid _projectId;
 
-        public IssueInProjectSpecification(Project project) => this.project = project;
+        public IssueInProjectSpecification(Guid projectId) => this._projectId = projectId;
 
         public override Expression<Func<Issue, bool>> SpecExpression
         {
-            get => issue => issue.ProjectId == this.project.Id;
+            get => issue => issue.ProjectId == this._projectId;
         }
     }
 }

@@ -18,9 +18,10 @@ namespace BTT.Domain.Models.Issues
         public Issue(Member assignedMember, Project assignedProject,
             string title, string description, Priority priority, DateTime dueDate)
         {
-            ValidatePrimitiveArgs(title, description);
-            ValidateDomainRootArgs(assignedMember, assignedProject);
-          
+            title.CheckNull(nameof(title));
+            description.CheckNull(nameof(description));
+            assignedMember.CheckNull(nameof(assignedMember));
+            assignedProject.CheckNull(nameof(assignedProject));
 
             this.Id = Guid.NewGuid();
             this.ProjectId = assignedProject.Id;
@@ -112,23 +113,5 @@ namespace BTT.Domain.Models.Issues
         {
             _attachments.Remove(attachment);
         }
-
-        private void ValidatePrimitiveArgs(params string[] args)
-        {
-            foreach (var arg in args)
-            {
-                arg.CheckNull(nameof(arg));
-            }
-        }
-
-        private void ValidateDomainRootArgs(params IAggregateRoot[] args)
-        {
-            foreach (var arg in args)
-            {
-                arg.CheckNull(nameof(arg));
-            }
-        }
-
-
     }
 }
