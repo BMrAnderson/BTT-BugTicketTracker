@@ -66,7 +66,7 @@ namespace BTT.Domain.Models.Issues
         {
             get => _attachments.AsReadOnly();
         }
-      
+
         public void ChangeDueDate(DateTime date)
         {
             this.EndDueDate = date;
@@ -74,11 +74,15 @@ namespace BTT.Domain.Models.Issues
 
         public void ChangeName(string name)
         {
+            ValidateTitle(name);
+
             this.Title = name;
         }
 
         public void ChangeDescription(string description)
         {
+            ValidateDescription(description);
+
             this.Description = description;
         }
 
@@ -89,6 +93,8 @@ namespace BTT.Domain.Models.Issues
 
         public void AddComment(Comment comment)
         {
+            ValidateComment(comment);
+
             _comments.Add(comment);
 
             //AddDomainEvent(new CommentAdded(comment));
@@ -96,11 +102,15 @@ namespace BTT.Domain.Models.Issues
 
         public void RemoveComment(Comment comment)
         {
+            ValidateComment(comment);
+
             _comments.Remove(comment);
         }
 
         public void AddAttachment(Attachment attachment)
         {
+            ValidateAttachment(attachment);
+
             _attachments.Add(attachment);
 
             //AddDomainEvent(new AttachmentAdded(attachment));
@@ -108,6 +118,8 @@ namespace BTT.Domain.Models.Issues
 
         public void RemoveAttachment(Attachment attachment)
         {
+            ValidateAttachment(attachment);
+
             _attachments.Remove(attachment);
         }
 
@@ -128,6 +140,16 @@ namespace BTT.Domain.Models.Issues
         private void ValidateProject(Project assignedProject)
         {
             Validation.CheckNull(assignedProject, nameof(assignedProject));
+        }
+
+        private void ValidateAttachment(Attachment attachment)
+        {
+            Validation.CheckNull(attachment, nameof(attachment));
+        }
+
+        private void ValidateComment(Comment comment)
+        {
+            Validation.CheckNull(comment, nameof(comment));
         }
 
         private void ValidateTitle(string title)

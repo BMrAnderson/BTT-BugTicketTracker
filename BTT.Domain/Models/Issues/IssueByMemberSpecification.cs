@@ -1,4 +1,5 @@
 ﻿using BTT.Domain.Common.Specification;
+using BTT.Domain.Common.Validation;
 using BTT.Domain.Models.Members;
 using System;
 using System.Collections.Generic;

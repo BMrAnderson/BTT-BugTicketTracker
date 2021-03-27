@@ -76,11 +76,15 @@ namespace BTT.Domain.Models.Members
 
         public void AddIssue(Issue issue)
         {
+            ValidateIssue(issue);
+
             _issues.Add(issue);
         }
 
         public void RemoveIssue(Issue issue)
         {
+            ValidateIssue(issue);
+
             _issues.Remove(issue);
         }
 
@@ -96,6 +100,8 @@ namespace BTT.Domain.Models.Members
 
         public void AddProject(ProjectMember project)
         {
+            ValidateProject(project);
+
             _memberProjects.Add(project);
 
             //AddDomainEvent(new ProjectCreated(project));
@@ -103,6 +109,8 @@ namespace BTT.Domain.Models.Members
 
         public void RemoveProject(ProjectMember project)
         {
+            ValidateProject(project);
+
             _memberProjects.Remove(project);
         }
 
@@ -115,6 +123,16 @@ namespace BTT.Domain.Models.Members
             Validation.CheckNull(organization, nameof(organization));
         }
 
+        private void ValidateIssue(Issue issue)
+        {
+            Validation.CheckNull(issue, nameof(issue));
+        }
+
+        private void ValidateProject(ProjectMember projectMember)
+        {
+            Validation.CheckNull(projectMember, nameof(projectMember));
+        }
+
         private void ValidateFirstAndLastName(string firstName, string lastName)
         {
             Validation.CheckStringLength<InvalidMemberException>(
@@ -122,6 +140,7 @@ namespace BTT.Domain.Models.Members
                 ValidStringConstants.MinNameLength,
                 ValidStringConstants.MaxNameLength,
                 nameof(firstName));
+           
             Validation.CheckStringLength<InvalidMemberException>(
                 lastName,
                 ValidStringConstants.MinNameLength,

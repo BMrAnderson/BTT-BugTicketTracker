@@ -4,7 +4,7 @@ using System;
 
 namespace BTT.Domain.Models.Issues
 {
-    public class IssueCreated : IDomainEvent<Issue>
+    public class IssueCreated : IDomainEvent
     {
         public Guid EventId { get; }
 

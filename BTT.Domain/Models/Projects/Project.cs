@@ -60,11 +60,15 @@ namespace BTT.Domain.Models.Projects
 
         public void AddProjectIssue(Issue issue)
         {
+            ValidateIssue(issue);
+
             _issues.Add(issue);
         }
 
         public void AddProjectMember(ProjectMember member)
         {
+            ValidateMember(member);
+
             _projectMembers.Add(member);
         }
 

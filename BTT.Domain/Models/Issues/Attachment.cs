@@ -28,14 +28,14 @@ namespace BTT.Domain.Models.Issues
 
         public void ChangeDescription(string description)
         {
-            Validation.CheckNull(description, nameof(description));
+            ValidateDescription(description);
 
             this.Description = description;
         }
 
         public void ChangeName(string name)
         {
-            Validation.CheckNull(name, nameof(name));
+            ValidateName(name);
 
             this.Filename = name;
         }
@@ -48,7 +48,6 @@ namespace BTT.Domain.Models.Issues
 
         private void ValidateName(string filename)
         {
-            Validation.CheckNull(filename, nameof(filename));
             Validation.CheckStringLength<InvalidAttachmentException>(
                 filename, 
                 ValidStringConstants.MinNameLength,
@@ -58,7 +57,6 @@ namespace BTT.Domain.Models.Issues
 
         private void ValidateDescription(string description)
         {
-            Validation.CheckNull(description, nameof(description));
             Validation.CheckStringLength<InvalidAttachmentException>(
                 description,
                 ValidStringConstants.MinDescriptionLength,

@@ -15,13 +15,13 @@ namespace BTT.Domain.Models.Members
 
         public DateTime EventDateOccured { get; }
 
-        public INotification Data { get; }
+        public INotification Notification { get; }
 
         public MemberIsNotified(INotification notification)
         {
             Validation.CheckNull(notification, nameof(notification));
 
-            this.Data = notification;
+            this.Notification = notification;
             this.EventId = Guid.NewGuid();
             this.EventDateOccured = DateTime.Now;
         }

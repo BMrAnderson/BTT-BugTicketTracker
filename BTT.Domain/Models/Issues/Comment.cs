@@ -24,7 +24,6 @@ namespace BTT.Domain.Models.Issues
 
         private void Validate(string text)
         {
-            Validation.CheckNull(text, nameof(text));
             Validation.CheckStringLength<InvalidCommentException>(
                 text,
                 ValidStringConstants.MinTextLength,

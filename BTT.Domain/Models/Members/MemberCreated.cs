@@ -4,19 +4,19 @@ using System;
 
 namespace BTT.Domain.Models.Members
 {
-    public class MemberCreated : IDomainEvent<Member>
+    public class MemberCreated : IDomainEvent
     {
         public Guid EventId { get; }
 
         public DateTime EventDateOccured { get; }
 
-        public Member Data { get; }
+        public Member Member { get; }
 
         public MemberCreated(Member member)
         {
             Validation.CheckNull(member, nameof(member));
 
-            this.Data = member;
+            this.Member = member;
             this.EventId = Guid.NewGuid();
             this.EventDateOccured = DateTime.Now;
         }
