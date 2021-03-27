@@ -1,6 +1,7 @@
-﻿using BTT.Domain.Common.Extensions;
-using BTT.Domain.Common.Models;
+﻿using BTT.Domain.Common.Models;
+using BTT.Domain.Common.Validation;
 using BTT.Domain.Contracts;
+using BTT.Domain.Exceptions;
 using BTT.Domain.Models.Members;
 using BTT.Domain.Models.Projects;
 using System;
@@ -16,7 +17,7 @@ namespace BTT.Domain.Models.Organizations
 
         public Organization(string name)
         {
-            name.CheckNull(nameof(name));
+            Validate(name);
 
             this.Id = Guid.NewGuid();
             this.Name = name;
@@ -46,29 +47,49 @@ namespace BTT.Domain.Models.Organizations
     
         public void AddOrganizationMember(Member member)
         {
-            member.CheckNull(nameof(member));
+            ValidateMember(member);
 
             _members.Add(member);
         }
 
         public void AddOrganizationProject(Project project)
         {
-            project.CheckNull(nameof(project));
+            ValidateProject(project);
 
             _projects.Add(project);
         }
         public void RemoveOrganizationMember(Member member)
         {
-            member.CheckNull(nameof(member));
+            ValidateMember(member);
 
             _members.Remove(member);
         }
 
         public void RemoveOrganizationProject(Project project)
         {
-            project.CheckNull(nameof(project));
-
+            ValidateProject(project);
+            
             _projects.Remove(project);
+        }
+
+        private void ValidateMember(Member member)
+        {
+            Validation.CheckNull(member, nameof(member));
+        }
+
+        private void ValidateProject(Project project)
+        {
+            Validation.CheckNull(project, nameof(project));
+        }
+
+        private void Validate(string name)
+        {
+            Validation.CheckStringLength<InvalidOrganizationException>(
+                name,
+                ValidStringConstants.MinNameLength,
+                ValidStringConstants.MaxNameLength,
+                nameof(name)
+                );
         }
     }
 }

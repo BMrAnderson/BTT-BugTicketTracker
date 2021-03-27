@@ -9,7 +9,7 @@ namespace BTT.Application.Services.Organizations
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public DateTime StartedDate { get; set; }
+        public DateTime DateCreated { get; set; }
         public List<ProjectDto> Projects { get; set; }
         public List<MemberDto> Members { get; set; }
     }

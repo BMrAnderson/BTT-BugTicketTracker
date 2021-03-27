@@ -1,4 +1,5 @@
-﻿using BTT.Domain.Models.Issues;
+﻿using BTT.Domain.Common.Events;
+using BTT.Domain.Models.Issues;
 using BTT.Domain.Models.Members;
 using BTT.Domain.Models.Organizations;
 using BTT.Domain.Models.Projects;
@@ -9,8 +10,12 @@ namespace BTT.Infrastructure.Common.Persistence
 {
     public class IssueTicketTrackerDBContext : DbContext
     {
-        public IssueTicketTrackerDBContext(DbContextOptions<IssueTicketTrackerDBContext> contextOptions) : base(contextOptions)
+        private readonly IDomainEventDispatcher _dispatcher;
+
+        public IssueTicketTrackerDBContext(DbContextOptions<IssueTicketTrackerDBContext> contextOptions, 
+            IDomainEventDispatcher dispatcher) : base(contextOptions)
         {
+            this._dispatcher = dispatcher;
         }
 
         public DbSet<Issue> Issues { get; set; }
@@ -25,5 +30,14 @@ namespace BTT.Infrastructure.Common.Persistence
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
+
+        public override int SaveChanges()
+        {
+
+
+            return base.SaveChanges();
+        }
+
+
     }
 }

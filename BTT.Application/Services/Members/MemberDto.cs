@@ -11,8 +11,10 @@ namespace BTT.Application.Services.Members
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public string Password { get; set; }
         public List<IssueDto> Issues { get; set; }
         public List<ProjectDto> Projects { get; set; }
         public Guid ProjectId { get; set; }
+        public Guid OrganizationId { get; set; }
     }
 }

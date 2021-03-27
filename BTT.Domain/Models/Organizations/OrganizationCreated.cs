@@ -1,5 +1,5 @@
 ﻿using BTT.Domain.Common.Events;
-using BTT.Domain.Common.Extensions;
+using BTT.Domain.Common.Validation;
 using System;
 
 namespace BTT.Domain.Models.Organizations
@@ -14,7 +14,7 @@ namespace BTT.Domain.Models.Organizations
 
         public OrganizationCreated(Organization organization)
         {
-            organization.CheckNull(nameof(organization));
+            Validation.CheckNull(organization, nameof(organization));
 
             this.Data = organization;
             this.EventId = Guid.NewGuid();

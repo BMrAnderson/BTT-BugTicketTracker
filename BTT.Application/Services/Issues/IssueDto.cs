@@ -9,8 +9,8 @@ namespace BTT.Application.Services.Issues
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime DateSubmitted { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime EndDueDate { get; set; }
         public Priority Priority { get; set; }
         public List<CommentDto> Comments { get; set; }
         public List<AttachmentDto> Attachments { get; set; }

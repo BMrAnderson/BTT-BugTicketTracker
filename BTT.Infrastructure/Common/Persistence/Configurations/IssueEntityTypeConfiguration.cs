@@ -22,7 +22,7 @@ namespace BTT.Infrastructure.Common.Persistence.Configurations
 
             builder.HasOne<Project>(i => i.Project).WithMany(p => p.Issues).HasForeignKey(i => i.ProjectId).OnDelete(DeleteBehavior.Restrict);
 
-            builder.OwnsMany(i => i.Attachments).Property(i => i.FileName).IsRequired();
+            builder.OwnsMany(i => i.Attachments).Property(i => i.Filename).IsRequired();
 
             builder.OwnsMany(i => i.Attachments).Property(i => i.Description).IsRequired();
 

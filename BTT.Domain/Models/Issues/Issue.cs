@@ -4,8 +4,8 @@ using BTT.Domain.Models.Members;
 using BTT.Domain.Models.Projects;
 using System;
 using System.Collections.Generic;
-using BTT.Domain.Common.Extensions;
 using BTT.Domain.Exceptions;
+using BTT.Domain.Common.Validation;
 
 namespace BTT.Domain.Models.Issues
 {
@@ -18,10 +18,7 @@ namespace BTT.Domain.Models.Issues
         public Issue(Member assignedMember, Project assignedProject,
             string title, string description, Priority priority, DateTime dueDate)
         {
-            title.CheckNull(nameof(title));
-            description.CheckNull(nameof(description));
-            assignedMember.CheckNull(nameof(assignedMember));
-            assignedProject.CheckNull(nameof(assignedProject));
+            Validate(assignedMember, assignedProject, title, description);
 
             this.Id = Guid.NewGuid();
             this.ProjectId = assignedProject.Id;
@@ -112,6 +109,45 @@ namespace BTT.Domain.Models.Issues
         public void RemoveAttachment(Attachment attachment)
         {
             _attachments.Remove(attachment);
+        }
+
+        private void Validate(Member assignedMember, Project assignedProject, 
+            string title, string description)
+        {
+            ValidateMember(assignedMember);
+            ValidateProject(assignedProject);
+            ValidateDescription(description);
+            ValidateTitle(title);
+        }
+
+        private void ValidateMember(Member assignedMember)
+        {
+            Validation.CheckNull(assignedMember, nameof(assignedMember));
+        }
+
+        private void ValidateProject(Project assignedProject)
+        {
+            Validation.CheckNull(assignedProject, nameof(assignedProject));
+        }
+
+        private void ValidateTitle(string title)
+        {
+            Validation.CheckStringLength<InvalidIssueException>(
+                title,
+                ValidStringConstants.MinNameLength,
+                ValidStringConstants.MaxNameLength,
+                nameof(title)
+                );
+        }
+
+        private void ValidateDescription(string description)
+        {
+            Validation.CheckStringLength<InvalidIssueException>(
+                description,
+                ValidStringConstants.MinDescriptionLength,
+                ValidStringConstants.MaxDescriptionLength,
+                nameof(description)
+                );
         }
     }
 }

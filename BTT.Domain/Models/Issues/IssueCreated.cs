@@ -1,4 +1,5 @@
 ﻿using BTT.Domain.Common.Events;
+using BTT.Domain.Common.Validation;
 using System;
 
 namespace BTT.Domain.Models.Issues
@@ -13,6 +14,8 @@ namespace BTT.Domain.Models.Issues
 
         public IssueCreated(Issue issue)
         {
+            Validation.CheckNull(issue, nameof(issue));
+
             this.Data = issue;
             this.EventId = Guid.NewGuid();
             this.EventDateOccured = DateTime.Now;

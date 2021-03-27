@@ -1,5 +1,5 @@
 ﻿using BTT.Domain.Common.Events;
-using BTT.Domain.Common.Extensions;
+using BTT.Domain.Common.Validation;
 using System;
 
 namespace BTT.Domain.Models.Projects
@@ -14,7 +14,7 @@ namespace BTT.Domain.Models.Projects
 
         public ProjectCreated(Project project)
         {
-            project.CheckNull(nameof(project));
+            Validation.CheckNull(project, nameof(project));
 
             this.Data = project;
             this.EventId = Guid.NewGuid();

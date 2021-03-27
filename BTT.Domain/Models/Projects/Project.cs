@@ -1,6 +1,7 @@
-﻿using BTT.Domain.Common.Extensions;
-using BTT.Domain.Common.Models;
+﻿using BTT.Domain.Common.Models;
+using BTT.Domain.Common.Validation;
 using BTT.Domain.Contracts;
+using BTT.Domain.Exceptions;
 using BTT.Domain.Models.Issues;
 using BTT.Domain.Models.Organizations;
 using System;
@@ -14,12 +15,10 @@ namespace BTT.Domain.Models.Projects
 
         private readonly List<ProjectMember> _projectMembers;
 
-        public Project(Organization organization,
-            string title, string description, DateTime dueDate)
+        public Project(Organization organization, string title, 
+            string description, DateTime dueDate)
         {
-            title.CheckNull(nameof(title));
-            organization.CheckNull(nameof(organization));
-            description.CheckNull(nameof(description));
+            Validate(title, description, organization);
 
             this.Id = Guid.NewGuid();
             this.OrganizationId = organization.Id;
@@ -71,7 +70,7 @@ namespace BTT.Domain.Models.Projects
 
         public void ChangeDescription(string description)
         {
-            description.CheckNull(nameof(description));
+            ValidateDescription(description);
 
             this.Description = description;
         }
@@ -83,18 +82,64 @@ namespace BTT.Domain.Models.Projects
 
         public void ChangeName(string title)
         {
-            title.CheckNull(nameof(title));
+            ValidateTitle(title);
 
             this.Title = title;
         }
         public void RemoveProjectIssue(Issue issue)
         {
+            ValidateIssue(issue);
+
             _issues.Remove(issue);
         }
 
         public void RemoveProjectMember(ProjectMember member)
         {
+            ValidateMember(member);
+
             _projectMembers.Remove(member);
+        }
+
+        private void Validate(string title, string description, Organization organization)
+        {
+            ValidateTitle(title);
+            ValidateDescription(description);
+            ValidateOrganization(organization);
+        }
+
+        private void ValidateOrganization(Organization organization)
+        {
+            Validation.CheckNull(organization, nameof(organization));
+        }
+
+        private void ValidateIssue(Issue issue)
+        {
+            Validation.CheckNull(issue, nameof(issue));
+        }
+
+        private void ValidateMember(ProjectMember member)
+        {
+            Validation.CheckNull(member, nameof(member));
+        }
+
+        private void ValidateTitle(string title)
+        {
+            Validation.CheckStringLength<InvalidProjectException>(
+                title,
+                ValidStringConstants.MinNameLength,
+                ValidStringConstants.MaxNameLength,
+                nameof(title)
+                );
+        }
+
+        private void ValidateDescription(string description)
+        {
+            Validation.CheckStringLength<InvalidProjectException>(
+                description,
+                ValidStringConstants.MinDescriptionLength,
+                ValidStringConstants.MaxDescriptionLength,
+                nameof(description)
+                );
         }
     }
 }

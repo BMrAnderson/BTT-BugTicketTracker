@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace BTT.Domain.Models.Organizations
 {
-    public class OrganizationAlreadyExistsSpecification : BaseSpecification<Organization>
+    public class OrganizationExistsByNameSpecification : BaseSpecification<Organization>
     {
         private string _organizationName;
 
-        public OrganizationAlreadyExistsSpecification(string organizationName)
+        public OrganizationExistsByNameSpecification(string organizationName)
         {
             this._organizationName = organizationName;
         }

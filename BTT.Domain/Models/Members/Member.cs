@@ -1,5 +1,5 @@
-﻿using BTT.Domain.Common.Extensions;
-using BTT.Domain.Common.Models;
+﻿using BTT.Domain.Common.Models;
+using BTT.Domain.Common.Validation;
 using BTT.Domain.Exceptions;
 using BTT.Domain.Models.Email;
 using BTT.Domain.Models.Issues;
@@ -8,6 +8,7 @@ using BTT.Domain.Models.Organizations;
 using BTT.Domain.Models.Projects;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace BTT.Domain.Models.Members
@@ -22,6 +23,7 @@ namespace BTT.Domain.Models.Members
 
         public Member(string firstName, string lastName, string email, string password, Organization organization)
         {
+            Validate(firstName, lastName, email, password, organization);
 
             this.Id = Guid.NewGuid();
             this.OrganizationId = organization.Id;
@@ -33,10 +35,17 @@ namespace BTT.Domain.Models.Members
 
             _memberProjects = new List<ProjectMember>();
             _issues = new List<Issue>();
-            //_notifications = new List<BaseNotification>();
+            _notifications = new List<BaseDomainNotification>();
         }
 
         private Member() {}
+
+        public void ChangeEmail(string email)
+        {
+            this.Email = email;
+
+            AddDomainEvent(new MemberChangedEmail(email));
+        }
 
         public string Email { get; private set; }
         
@@ -97,23 +106,80 @@ namespace BTT.Domain.Models.Members
             _memberProjects.Remove(project);
         }
 
-        private void ValidateArgs(string firstName, string lastName, string email, string password, Organization organization)
+        private void Validate(string firstName, string lastName, string email, string password, Organization organization)
         {
-            firstName.CheckNull(nameof(firstName));
-            lastName.CheckNull(nameof(lastName));
-            email.CheckNull(nameof(email));
-            password.CheckNull(nameof(password));
-            organization.CheckNull(nameof(organization));     
+            ValidateFirstAndLastName(firstName, lastName);
+            ValidateEmail(email);
+            ValidatePassword(password);
+           
+            Validation.CheckNull(organization, nameof(organization));
+        }
+
+        private void ValidateFirstAndLastName(string firstName, string lastName)
+        {
+            Validation.CheckStringLength<InvalidMemberException>(
+                firstName,
+                ValidStringConstants.MinNameLength,
+                ValidStringConstants.MaxNameLength,
+                nameof(firstName));
+            Validation.CheckStringLength<InvalidMemberException>(
+                lastName,
+                ValidStringConstants.MinNameLength,
+                ValidStringConstants.MaxNameLength,
+                nameof(lastName));
+        }
+
+        private void ValidatePassword(string password)
+        {
+            var rgxNumber = new Regex(ValidPasswordConstants.RgxNumber);
+            var rgxUpperCase = new Regex(ValidPasswordConstants.RgxUpperCase);
+            var rgxMinMaxChars = new Regex(ValidPasswordConstants.RgxMinMaxChars);
+            var rgxLowerChar = new Regex(ValidPasswordConstants.RgxLowerChar);
+            var rgxSymbols = new Regex(ValidPasswordConstants.RgxSymbols);
+
+            int errorCount = 0;
+            var stringErrorBuilder = new StringBuilder("Password must contain:");
+
+            if (!rgxNumber.IsMatch(password))
+            {
+                stringErrorBuilder.AppendLine("atleast one number.");
+                errorCount++;
+            }       
+            if (!rgxUpperCase.IsMatch(password))
+            {
+                stringErrorBuilder.AppendLine("one Uppercase letter.");
+                errorCount++;
+            }         
+            if (!rgxMinMaxChars.IsMatch(password))
+            {
+                stringErrorBuilder.AppendLine("minimum 8 and max 12 characters.");
+                errorCount++;
+            }
+            if (!rgxLowerChar.IsMatch(password))
+            {
+                stringErrorBuilder.AppendLine("one Lowercase letter.");
+                errorCount++;
+            }  
+            if (!rgxSymbols.IsMatch(password))
+            {
+                stringErrorBuilder.AppendLine("one Special character.");
+                errorCount++;
+            }
+
+            Validation.CheckCondition<InvalidMemberException>(
+                errorCount == 0,
+                stringErrorBuilder.ToString()
+                );
         }
 
         private void ValidateEmail(string email)
         {
-            string pattern = EmailConstants.EmailRegexPattern;
+            var rgxEmail = new Regex(ValidEmailConstants.RgxEmail);
 
-            var regex = new Regex(pattern);
-
-            email.ThrowIfConditionNotMet<InvalidMemberException>
-                ("Member email was not valid.", e => regex.IsMatch(email));
+            Validation.CheckCondition<InvalidMemberException>(
+                rgxEmail.IsMatch(email),
+                "Email is not valid."
+                );
         }
 
     }

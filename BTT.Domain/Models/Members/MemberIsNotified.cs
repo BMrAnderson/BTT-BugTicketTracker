@@ -1,4 +1,5 @@
 ﻿using BTT.Domain.Common.Events;
+using BTT.Domain.Common.Validation;
 using BTT.Domain.Models.Notifications;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace BTT.Domain.Models.Members
 
         public MemberIsNotified(INotification notification)
         {
+            Validation.CheckNull(notification, nameof(notification));
+
             this.Data = notification;
             this.EventId = Guid.NewGuid();
             this.EventDateOccured = DateTime.Now;

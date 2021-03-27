@@ -1,15 +1,14 @@
-﻿using BTT.Domain.Common.Extensions;
+﻿using BTT.Domain.Common.Validation;
 using BTT.Domain.Models.Members;
 using System;
 
 namespace BTT.Domain.Models.Projects
 {
-    public class ProjectMember
+    public class ProjectMember 
     {
         public ProjectMember(Project project, Member member)
         {
-            project.CheckNull(nameof(project));
-            member.CheckNull(nameof(member));
+            Validate(project, member);
 
             this.Project = project;
             this.Member = member;
@@ -24,5 +23,11 @@ namespace BTT.Domain.Models.Projects
         public Guid MemberId { get; private set; }
 
         public Member Member { get; private set; }
+
+        private void Validate(Project project, Member member)
+        {
+            Validation.CheckNull(project, nameof(project));
+            Validation.CheckNull(member, nameof(member));
+        }
     }
 }

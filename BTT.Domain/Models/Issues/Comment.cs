@@ -1,4 +1,7 @@
-﻿using BTT.Domain.Contracts;
+﻿
+using BTT.Domain.Common.Validation;
+using BTT.Domain.Contracts;
+using BTT.Domain.Exceptions;
 using System;
 
 namespace BTT.Domain.Models.Issues
@@ -9,8 +12,7 @@ namespace BTT.Domain.Models.Issues
 
         public Comment(string text, DateTime dateCommented)
         {
-            if (string.IsNullOrEmpty(text))
-                throw new ArgumentNullException(nameof(text));
+            Validate(text);
 
             this.Text = text;
             this.DateCreated = dateCommented;
@@ -19,5 +21,16 @@ namespace BTT.Domain.Models.Issues
         public string Text { get; private set; }
 
         public DateTime DateCreated { get; private set; }
+
+        private void Validate(string text)
+        {
+            Validation.CheckNull(text, nameof(text));
+            Validation.CheckStringLength<InvalidCommentException>(
+                text,
+                ValidStringConstants.MinTextLength,
+                ValidStringConstants.MaxTextLength,
+                nameof(text)
+                );
+        }
     }
 }

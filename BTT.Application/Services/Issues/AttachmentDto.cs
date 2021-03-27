@@ -7,6 +7,6 @@ namespace BTT.Application.Services.Issues
         public Guid IssueId { get; set; }
         public string Filename { get; set; }
         public string Description { get; set; }
-        public DateTime DateAdded { get; set; }
+        public DateTime DateCreated { get; set; }
     }
 }

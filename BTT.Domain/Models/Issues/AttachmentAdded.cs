@@ -1,4 +1,5 @@
 ﻿using BTT.Domain.Common.Events;
+using BTT.Domain.Common.Validation;
 using System;
 
 namespace BTT.Domain.Models.Issues
@@ -13,6 +14,8 @@ namespace BTT.Domain.Models.Issues
 
         public AttachmentAdded(Attachment attachment)
         {
+            Validation.CheckNull(attachment, nameof(attachment));
+
             this.Data = attachment;
             this.EventId = Guid.NewGuid();
             this.EventDateOccured = DateTime.Now;

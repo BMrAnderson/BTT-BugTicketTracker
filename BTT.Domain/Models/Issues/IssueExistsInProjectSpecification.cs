@@ -5,11 +5,11 @@ using System.Linq.Expressions;
 
 namespace BTT.Domain.Models.Issues
 {
-    public class IssueInProjectSpecification : BaseSpecification<Issue>
+    public class IssueExistsInProjectSpecification : BaseSpecification<Issue>
     {
         private readonly Guid _projectId;
 
-        public IssueInProjectSpecification(Guid projectId) => this._projectId = projectId;
+        public IssueExistsInProjectSpecification(Guid projectId) => this._projectId = projectId;
 
         public override Expression<Func<Issue, bool>> SpecExpression
         {
