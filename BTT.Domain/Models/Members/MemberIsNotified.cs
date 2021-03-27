@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BTT.Domain.Models.Members
 {
-    public class MemberIsNotified : IDomainEvent<INotification>
+    public class MemberIsNotified : IDomainEvent
     {
         public Guid EventId { get; }
 

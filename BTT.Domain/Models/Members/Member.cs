@@ -44,7 +44,7 @@ namespace BTT.Domain.Models.Members
         {
             this.Email = email;
 
-            AddDomainEvent(new MemberChangedEmail(email));
+            PublishEvent(new MemberChangedEmail(email));
         }
 
         public string Email { get; private set; }

@@ -11,6 +11,11 @@ namespace BTT.Infrastructure.Common.Repositories
     {
         private readonly EFRepository<Member> _efMemberRepository;
 
+        public MemberRepository(EFRepository<Member> memberRepository)
+        {
+            this._efMemberRepository = memberRepository;
+        }
+
         public void Add(Member entity)
         {
             _efMemberRepository.Add(entity);

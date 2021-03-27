@@ -11,6 +11,11 @@ namespace BTT.Infrastructure.Common.Repositories
     {
         private readonly EFRepository<Organization> _efOrganizationRepository;
 
+        public OrganizationRepository(EFRepository<Organization> efOrganizationRepository)
+        {
+            this._efOrganizationRepository = efOrganizationRepository;
+        }
+
         public void Add(Organization entity)
         {
             _efOrganizationRepository.Add(entity);

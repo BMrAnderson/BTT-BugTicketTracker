@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BTT.Application\BTT.Application.csproj" />
     <ProjectReference Include="..\BTT.Domain\BTT.Domain.csproj" />
     <ProjectReference Include="..\BTT.Infrastructure\BTT.Infrastructure.csproj" />
   </ItemGroup>

@@ -1,11 +1,12 @@
 ﻿using BTT.Domain.Common.Events;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace BTT.Domain.Common
 {
     public interface IEntity
     {
-        IReadOnlyCollection<IDomainEvent> DomainEvents { get; }
+        IProducerConsumerCollection<IDomainEvent> DomainEvents { get; }
 
         void ClearAllEvents();
     }

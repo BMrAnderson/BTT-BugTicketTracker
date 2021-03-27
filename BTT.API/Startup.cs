@@ -1,3 +1,5 @@
+using BTT.Infrastructure;
+using BTT.Application;
 using BTT.Infrastructure.Common.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,10 +23,8 @@ namespace BTT.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<IssueTicketTrackerDBContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("BugTrackerDatabase"));
-            });
+            services.AddInfrastructureServices(Configuration);
+            services.AddApplicationServices();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

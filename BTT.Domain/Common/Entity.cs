@@ -1,5 +1,6 @@
 ﻿using BTT.Domain.Common.Events;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,40 +8,18 @@ namespace BTT.Domain.Common.Models
 {
     public abstract class Entity : IEntity
     {
-        public Entity()
-        {
-            _domainEvents = new List<IDomainEvent>();
-        }
-
         public virtual Guid Id { get; protected set; }
 
-        private List<IDomainEvent> _domainEvents;
+        private readonly ConcurrentQueue<IDomainEvent> _domainEvents;
 
-        public IReadOnlyCollection<IDomainEvent> DomainEvents
+        public IProducerConsumerCollection<IDomainEvent> DomainEvents
         {
-            get => _domainEvents.AsReadOnly();
+            get => _domainEvents;
         }
 
         protected void PublishEvent(IDomainEvent @event)
         {
-            _domainEvents.Add(@event);
-        }
-
-
-        public void AddDomainEvent(IDomainEvent domainEvent)
-        {
-            _domainEvents = _domainEvents ?? new List<IDomainEvent>();
-            _domainEvents.Add(domainEvent);
-        }
-
-        public void RemoveDomainEventById(Guid id)
-        {
-            _domainEvents?.RemoveAll(e => e.EventId == id);
-        }
-
-        public void RemoveDomainEvent(IDomainEvent domainEvent)
-        {
-            _domainEvents?.Remove(domainEvent);
+            _domainEvents.Enqueue(@event);
         }
 
         public void ClearAllEvents()

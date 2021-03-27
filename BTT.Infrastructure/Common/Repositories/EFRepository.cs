@@ -11,12 +11,12 @@ namespace BTT.Infrastructure.Domain.Repositories
 {
     public class EFRepository<TEntity> : IRepository<TEntity> where TEntity : class, IAggregateRoot
     {
-        private readonly IssueTicketTrackerDBContext _context;
+        private readonly IssueTicketTrackerDBContext _dbContext;
         private readonly DbSet<TEntity> _entities;
 
         public EFRepository(IssueTicketTrackerDBContext dbContext)
         {
-            _context = dbContext;
+            _dbContext = dbContext;
             _entities = dbContext.Set<TEntity>();
         }
 
