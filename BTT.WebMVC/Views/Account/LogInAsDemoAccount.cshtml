@@ -1,0 +1,53 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login with a demo account</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/RegisterPageStyles.css" />
+
+</head>
+<body class="bg-home-register">
+    <div class="form shadow rounded">
+        <div class="card">
+            <header class="card-header">
+                <h3 class="card-title font-weight-light mt-2">Login with a Demo Account</h3>
+            </header>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col m-2">
+                        <div class="card">
+                            <a href="#" class="btn btn-secondary">Admin</a>
+                        </div>
+                    </div>
+                    <div class="col m-2">
+                        <div class="card">
+                            <a href="#" class="btn btn-secondary">Developer</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col m-2">
+                        <div class="card">
+                            <a href="#" class="btn btn-secondary">Reporter</a>
+                        </div>
+                    </div>
+                    <div class="col m-2">
+                        <div class="card">
+                            <a href="" class="btn btn-secondary">Tester</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body text-center border-top">
+                <span>Login with an <a asp-action="LogIn" class="btn-link">existing account?</a></span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

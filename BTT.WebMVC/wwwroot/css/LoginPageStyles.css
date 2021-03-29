@@ -1,0 +1,54 @@
+﻿.bg-home-login {
+    background: #232526; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.form {
+    background: #fcfcfc;
+    width: 400px;
+    opacity: 0.9;
+}
+
+.btn-link:hover {
+    cursor: pointer;
+}
+
+
+.form-final-block {
+    margin-top: 50px;
+}
+
+.login-or {
+    position: relative;
+    color: #aaa;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.span-or {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: -2px;
+    margin-left: -25px;
+    background-color: #fff;
+    width: 50px;
+    text-align: center;
+}
+
+.hr-or {
+    height: 1px;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.btn-success, .btn-success:hover, .btn-success:active, btn-success:visited,btn-success:focus {
+    background-color: #86C136 !important;
+}

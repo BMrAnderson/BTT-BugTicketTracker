@@ -1,0 +1,83 @@
+﻿@using BTT.WebMVC.Extensions.HTML
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BTT.WebMVC</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/navbarstyles.css" />
+    <link href="~/lib/jquery/jquery-ui.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <nav class="bg-dark shadow" id="sidebar-wrapper">
+            <div class="sidebar-heading">
+                <div><img src="~/Icons/bug.png" class="mb-2" /> <span class="title-brand font-weight-light"> Bug Tracker</span></div>
+            </div>
+            <div class="list-group list-group-flush font-weight-light">
+                <a asp-controller="Dashboard" action="Index"
+                   class="@Html.IsSelected(controller: "Dashboard",action: "Index") list-group-item list-group-item-action bg-transparent">
+                    <i class="fa-fw fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a asp-controller="Member" action="Index"
+                   class="@Html.IsSelected(controller: "Member",action: "Index") list-group-item list-group-item-action bg-transparent">
+                    <i class="fa-fw fas fa-users"></i>
+                    <span>Members Roles</span>
+                </a>
+                <a asp-controller="Project" action="Index"
+                   class="@Html.IsSelected(controller: "Project", action: "Index") list-group-item list-group-item-action bg-transparent">
+                    <i class="fa-fw fas fa-project-diagram"></i>
+                    <span>Project Tickets</span>
+                </a>
+                <a asp-controller="Issue" action="Index"
+                   class="@Html.IsSelected(controller: "Issue", action: "Index") list-group-item list-group-item-action bg-transparent">
+                    <i class="fa-fw fas fa-bug"></i>
+                    <span> Bug Tickets</span>
+                </a>
+                <a asp-controller="Account" action="Index"
+                   class="@Html.IsSelected(controller: "Account", action: "Index")list-group-item list-group-item-action bg-transparent">
+                    <i class="fa-fw fas fa-user-circle"></i>
+                    <span>My Profile</span>
+                </a>
+            </div>
+        </nav>
+        <!-- /#sidebar-wrapper -->
+        <div id="page-content-wrapper">
+            <nav class="nav navbar-expand  bg-green-gradient p-2 shadow">
+                <a class="navbar-brand" href="#"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-text text-white">Welcome, Brendon!</div>
+                <div class="nav-item align-content-end">
+                    <div class="img-thumbnail"></div>
+                </div>
+            </nav>
+            <div>
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    </div>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - BTT.WebMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/notify.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

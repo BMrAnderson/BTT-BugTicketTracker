@@ -1,0 +1,66 @@
+﻿@model BTT.WebMVC.Models.ViewModels.MemberLogInViewModel
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login to your Bug Tracker Account</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/LoginPageStyles.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body class="bg-home-login">
+    <div class="form shadow mb-2 rounded">
+        <form asp-action="LogIn">
+            <div class="justify-content-center">
+                <div class="card">
+                    <div class="card-header p-3">
+                        <h2 class="card-title text-center font-weight-light">Log In  <img src="~/Icons/bug.png" class="figure-img" /></h2>
+                    </div>
+                </div>
+                <article class="card-body">
+                    <div class="form-group pt-1 pl-4 pr-4">
+                        <label asp-for="@Model.Email" class="col-form-label"></label>
+                        <input asp-for="@Model.Email" class="form-control" />
+                        <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group pl-4 pr-4">
+                        <label asp-for="@Model.Password" class="col-form-label"></label>
+                        <input asp-for="@Model.Password" class="form-control" />
+                        <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group pl-4">
+                        <span class="text-muted">Forgot password? <span class="btn-link">Click here</span></span>
+                    </div>
+                    <div class="form-group pl-4">
+                        <span class="text-muted">Login as a <a class="btn-link" asp-action="LogInAsDemoAccount">Demo User</a> </span>
+                    </div>
+                    <div class="form-group form-final-block pl-4 pr-4">
+                        <button type="submit" class="btn btn-dark btn-block">Sign In</button>
+                    </div>
+                    <div class="col-12">
+                        <div class="login-or">
+                            <hr class="hr-or">
+                            <span class="span-or">or</span>
+                        </div>
+                    </div>
+                    <div class="form-group pl-4 pr-4">
+                        <a asp-action="Register" class="btn btn-success btn-block">Register</a>
+                    </div>
+                </article>
+            </div>
+        </form>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

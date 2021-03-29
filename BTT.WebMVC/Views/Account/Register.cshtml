@@ -1,0 +1,70 @@
+﻿@model BTT.WebMVC.Models.ViewModels.MemberViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create a Bug Tracker Account</title>
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/RegisterPageStyles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body class="bg-home-register">
+    <div class="form shadow rounded">
+        <div class="card">
+            <header class="card-header">
+                <img class="float-right mt-1" src="~/Icons/bug.png" />
+                <h3 class="card-title font-weight-light mt-2">Sign Up</h3>
+            </header>
+            <article class="card-body">
+                <form class="pt-2">
+                    <div class="form-row">
+                        <div class="col form-group p-2">
+                            <label asp-for="@Model.FirstName" class="col-form-label"></label>
+                            <input asp-for="@Model.FirstName" class="form-control" />
+                            <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col form-group p-2">
+                            <label asp-for="@Model.LastName" class="col-form-label"></label>
+                            <input asp-for="@Model.LastName" class="form-control" />
+                            <span asp-validation-for="@Model.LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col form-group p-2">
+                            <label asp-for="@Model.Email" class="col-form-label"></label>
+                            <input asp-for="@Model.Email" class="form-control" />
+                            <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col form-group p-2">
+                        <label asp-for="@Model.Password" class="col-form-label"></label>
+                        <input asp-for="@Model.Password" class="form-control" />
+                        <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group pt-3">
+                        <button type="submit" asp-action="" class="btn btn-success btn-block">Create Account</button>
+                    </div>
+                    <div class="form-group border-top">
+                        <span>Already have an account? <a asp-controller="Account" asp-action="LogIn" class="btn-link">Log In</a></span>
+                    </div>
+                </form>
+            </article>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+</body>
+</html>

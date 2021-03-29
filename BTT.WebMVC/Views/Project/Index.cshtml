@@ -1,0 +1,94 @@
+﻿@model IEnumerable<BTT.WebMVC.Models.ViewModels.ProjectViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div id="top-content" class="container-fluid">
+    <p class="display-4 float-left" style="font-size: 30px">My Projects</p>
+    <button id="submit-btn" class="btn btn-success float-right mb">Submit Project <i class="fas fa-plus"></i></button>
+</div>
+
+<hr class="line" />
+
+<div id="center-content" class="container-fluid mt-3">
+    <table class="display table table-striped mt-5" style="width:100%" id="datatable">
+        <thead class="thead-dark" style="opacity: 0.9;">
+            <tr>
+                <th hidden>@Html.DisplayNameFor(model => model.Id)</th>
+                <th>@Html.DisplayNameFor(model => model.Title)</th>
+                <th>@Html.DisplayNameFor(model => model.Description)</th>
+                <th>@Html.DisplayNameFor(model => model.DateCreated)</th>
+                <th>@Html.DisplayNameFor(model => model.DueDate)</th>
+            </tr>
+        </thead>
+        <tbody style="opacity:0.9">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td hidden>@Html.DisplayFor(model => item.Id)</td>
+                    <td>
+                        @Html.DisplayFor(model => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.DateCreated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.DueDate)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+    <style>
+        .line {
+            margin-top: 50px;
+            margin-left: 50px;
+            margin-right: 50px;
+            border-bottom: 2px;
+        }
+
+        .btn-success, .btn-success:hover, .btn-success:active, btn-success:visited, btn-success:focus {
+            background: #86C136;
+            background: -webkit-linear-gradient(right, #86C136, #67BA2E);
+            background: -moz-linear-gradient(right, #86C136, #67BA2E);
+            background: linear-gradient(to left, #86C136, #67BA2E);
+            border-color: #86C136;
+        }
+
+        i {
+            margin-left: 10px
+        }
+
+        #submit-btn {
+            width: 180px;
+        }
+
+        #top-content, #center-content {
+            padding-left: 50px;
+            padding-top: 20px;
+            padding-right: 50px;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            var table = $("#datatable").DataTable({
+                'dom' : '<"float-left"f><"float-right"l><t><i><p>'
+            });
+        });
+
+    </script>
+}
+
