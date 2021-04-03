@@ -6,8 +6,9 @@
 
 <div id="top-content" class="container-fluid">
     <p class="display-4 float-left" style="font-size: 30px">My Bugs</p>
-    <button id="submit-btn" class="btn btn-success float-right" 
-            onclick="PopupForm('@Url.Action("AddOrEdit","Issue")')">Submit Bug <i class="fas fa-plus"></i>
+    <button id="submit-btn" class="btn btn-success float-right"
+            onclick="PopupForm('@Url.Action("AddOrEdit","Issue")')">
+        Submit Bug <i class="fas fa-plus"></i>
     </button>
 </div>
 
@@ -21,23 +22,24 @@
                 <th>Description</th>
                 <th>DateCreated</th>
                 <th>EndDueDate</th>
-                <th>Priority)</th>
+                <th>Priority</th>
             </tr>
         </thead>
     </table>
 </div>
 
-<div id="addIssue" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div id="addIssue" class="modal fade p-5" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 100%; max-width: 1000px;">
         <div id="modalContent" class="modal-content">
-           
+
         </div>
     </div>
 </div>
 
 @section scripts{
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
-
+    @*<script src="~/lib/jquery/jquery-1.12.4.min.js"></script>*@
+    <script src="~/lib/jquery/jquery-ui-1.12.1.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
     <script src="~/js/notify.min.js"></script>
 
@@ -80,10 +82,15 @@
             background: linear-gradient(to left, #86C136, #67BA2E);
             border: none;
         }
+
+        .modal-header {
+            cursor: move;
+        }
     </style>
 
     <script>
-        var table;
+        var table, dialog;
+
         $(document).ready(function () {
             table = $("#datatable").DataTable({
                 "dom": '<"float-left"f><"float-right"l><t><i><p>',
@@ -96,7 +103,11 @@
                     { "data": 'Title' },
                     { "data": 'Description' },
                     { "data": 'DateCreated' },
-                    { "data": 'EndDueDate' },
+                    {
+                        "data": 'EndDueDate', "render": function (data) {
+                            return setDateTimeColor(data);
+                        }
+                    },
                     {
                         "data": 'Priority', "render": function (data) {
                             return setBadgeColor(data);
@@ -106,13 +117,18 @@
             });
         });
 
-        function PopupForm(url) {   
+
+        function PopupForm(url) {
+            $('#addIssue').draggable({
+                handle: ".modal-header"
+            });
+
             $.get(url)
                 .done(function (response) {
                     $("#modalContent").html(response);
                     $("#addIssue").modal('show');
-                    });
-                }
+                });
+        }
 
 
             function SubmitForm(form) {
@@ -159,6 +175,17 @@
 
                 });
             }
+        }
+
+        function setDateTimeColor(data) {
+            var colorClass = '';
+            var date = new Date().toLocaleString().replace(',', '');
+            if (data === date) {
+                colorClass = 'text-danger';
+            } else {
+                colorClass = 'text-info';
+            }
+            return '<span class="' + colorClass + '">' + data + '</span >'
         }
 
         function setBadgeColor(data) {

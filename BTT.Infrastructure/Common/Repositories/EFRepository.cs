@@ -11,8 +11,8 @@ namespace BTT.Infrastructure.Domain.Repositories
 {
     public class EFRepository<TEntity> : IRepository<TEntity> where TEntity : class, IAggregateRoot
     {
-        private readonly IssueTicketTrackerDBContext _dbContext;
-        private readonly DbSet<TEntity> _entities;
+        protected readonly IssueTicketTrackerDBContext _dbContext;
+        protected readonly DbSet<TEntity> _entities;
 
         public EFRepository(IssueTicketTrackerDBContext dbContext)
         {

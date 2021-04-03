@@ -1,12 +1,12 @@
-﻿@model IEnumerable<BTT.WebMVC.Models.ViewModels.ProjectViewModel>
-@{
+﻿@{
     ViewData["Title"] = "Index";
 }
 
 
 <div id="top-content" class="container-fluid">
     <p class="display-4 float-left" style="font-size: 30px">My Projects</p>
-    <button id="submit-btn" class="btn btn-success float-right mb">Submit Project <i class="fas fa-plus"></i></button>
+    <button id="submit-btn" class="btn btn-success float-right mb"
+           onclick="PopupForm('@Url.Action("AddOrEdit", "Project")')" >Submit Project <i class="fas fa-plus"></i></button>
 </div>
 
 <hr class="line" />
@@ -15,41 +15,29 @@
     <table class="display table table-striped mt-5" style="width:100%" id="datatable">
         <thead class="thead-dark" style="opacity: 0.9;">
             <tr>
-                <th hidden>@Html.DisplayNameFor(model => model.Id)</th>
-                <th>@Html.DisplayNameFor(model => model.Title)</th>
-                <th>@Html.DisplayNameFor(model => model.Description)</th>
-                <th>@Html.DisplayNameFor(model => model.DateCreated)</th>
-                <th>@Html.DisplayNameFor(model => model.DueDate)</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Date Created</th>
+                <th>Due Date</th>
             </tr>
         </thead>
-        <tbody style="opacity:0.9">
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td hidden>@Html.DisplayFor(model => item.Id)</td>
-                    <td>
-                        @Html.DisplayFor(model => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => item.DateCreated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => item.DueDate)
-                    </td>
-
-                </tr>
-            }
-        </tbody>
     </table>
 </div>
+
+<div id="addProject" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 80%; max-width: 800px;" >
+        <div id="modalContent" class="modal-content">
+
+        </div>
+    </div>
+</div>
+
 
 @section scripts{
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
 
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script src="~/js/notify.min.js"></script>
 
     <style>
         .line {
@@ -83,11 +71,54 @@
     </style>
 
     <script>
+        var table;
         $(document).ready(function () {
-            var table = $("#datatable").DataTable({
-                'dom' : '<"float-left"f><"float-right"l><t><i><p>'
+             table = $("#datatable").DataTable({
+                "dom": '<"float-left"f><"float-right"l><t><i><p>',
+                "ajax": {
+                    "url": '/Project/GetAllProjects',
+                    "type": 'GET',
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "Title" },
+                    { "data": "Description" },
+                    { "data": "DateCreated" },
+                    { "data": "DueDate"}
+                ]
             });
         });
+
+        function PopupForm(url) {
+            $.get(url)
+                .done(function (response) {
+                    $("#modalContent").html(response);
+                    $("#addProject").modal('show');
+                });
+        }
+
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            $("#addProject").modal('hide');
+                            table.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top right",
+                                className: "success"
+                            });
+                        }
+                    }
+                });
+            }
+            return false;
+        }
 
     </script>
 }

@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
+
 namespace BTT.Infrastructure
 {
     public static class InfrastructureConfiguration
@@ -36,10 +37,19 @@ namespace BTT.Infrastructure
 
 
         private static IServiceCollection AddRepositories(this IServiceCollection services)
-        => services.Scan(scan =>
-                scan.FromCallingAssembly()
-                    .AddClasses()
-                    .AsMatchingInterface()
-                    .WithTransientLifetime()); 
+        {
+            services.AddTransient(typeof(IRepository<>), typeof(EFRepository<>));
+            services.AddTransient<IIssueRepository, IssueRepository>();
+            services.AddTransient<IMemberRepository, MemberRepository>();
+            services.AddTransient<IOrganizationRepository, OrganizationRepository>();
+            services.AddTransient<IProjectRepository, ProjectRepository>();
+
+            return services;
+        }
+        //=> services.Scan(scan =>
+        //        scan.FromCallingAssembly()
+        //            .AddClasses()
+        //            .AsMatchingInterface()
+        //            .WithTransientLifetime()); 
     }
 }

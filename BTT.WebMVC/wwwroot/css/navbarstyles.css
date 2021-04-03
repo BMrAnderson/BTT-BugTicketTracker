@@ -1,8 +1,8 @@
 ﻿
 
-#wrapper {
+/*#wrapper {
     overflow-x: hidden;
-}
+}*/
 
 .bg-dark-gradient {
     background: #232526; /* fallback for old browsers */
@@ -50,6 +50,19 @@
         margin-left: -15rem;
     }
 }
+
+#top-nav {
+    display: flex;
+}
+
+#profile-dropdown {
+    margin-right: 50px;
+}
+
+.bg-light-green {
+    background: #86C136;
+}
+
 
 .bg-green-gradient {
     background: #86C136;

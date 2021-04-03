@@ -25,7 +25,7 @@ namespace BTT.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DateSubmitted")
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -33,7 +33,7 @@ namespace BTT.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateTime>("EndDueDate")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("MemberId")
@@ -95,19 +95,41 @@ namespace BTT.Infrastructure.Migrations
                     b.ToTable("Members");
                 });
 
+            modelBuilder.Entity("BTT.Domain.Models.Notifications.BaseDomainNotification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("MemberId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("BaseDomainNotification");
+                });
+
             modelBuilder.Entity("BTT.Domain.Models.Organizations.Organization", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("OrganizationStartedDate")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -128,7 +150,7 @@ namespace BTT.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateTime>("EndDueDate")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("OrganizationId")
@@ -185,14 +207,14 @@ namespace BTT.Infrastructure.Migrations
                                 .HasColumnType("int")
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                            b1.Property<DateTime>("DateAdded")
+                            b1.Property<DateTime>("DateCreated")
                                 .HasColumnType("datetime2");
 
                             b1.Property<string>("Description")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("FileName")
+                            b1.Property<string>("Filename")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
@@ -214,7 +236,7 @@ namespace BTT.Infrastructure.Migrations
                                 .HasColumnType("int")
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                            b1.Property<DateTime>("DateCommented")
+                            b1.Property<DateTime>("DateCreated")
                                 .HasColumnType("datetime2");
 
                             b1.Property<string>("Text")
@@ -248,6 +270,13 @@ namespace BTT.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("BTT.Domain.Models.Notifications.BaseDomainNotification", b =>
+                {
+                    b.HasOne("BTT.Domain.Models.Members.Member", null)
+                        .WithMany("Notifications")
+                        .HasForeignKey("MemberId");
                 });
 
             modelBuilder.Entity("BTT.Domain.Models.Projects.Project", b =>
@@ -285,6 +314,8 @@ namespace BTT.Infrastructure.Migrations
                     b.Navigation("Issues");
 
                     b.Navigation("MemberProjects");
+
+                    b.Navigation("Notifications");
                 });
 
             modelBuilder.Entity("BTT.Domain.Models.Organizations.Organization", b =>

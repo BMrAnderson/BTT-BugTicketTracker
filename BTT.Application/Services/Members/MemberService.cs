@@ -6,6 +6,7 @@ using BTT.Domain.Common.Specification;
 using BTT.Domain.Models.Members;
 using BTT.Domain.Models.Projects;
 using System;
+using System.Collections.Generic;
 
 namespace BTT.Application.Services.Members
 {
@@ -16,9 +17,14 @@ namespace BTT.Application.Services.Members
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public MemberService(IRepository<Member> memberRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public MemberService(
+            IRepository<Member> memberRepository, 
+            IRepository<Project> projectRepository, 
+            IUnitOfWork unitOfWork, 
+            IMapper mapper)
         {
             this._memberRepository = memberRepository;
+            this._projectRepository = projectRepository;
             this._unitOfWork = unitOfWork;
             this._mapper = mapper;
         }

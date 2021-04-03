@@ -7,10 +7,12 @@ using BTT.Domain.Models.Issues;
 using BTT.Domain.Models.Members;
 using BTT.Domain.Models.Projects;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BTT.Application.Services.Issues
 {
-    public class IssueService : IIssueService
+    public class IssueService : IIssueViewModelService
     {
         private readonly IRepository<Issue> _issueRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -43,7 +45,7 @@ namespace BTT.Application.Services.Issues
             return issueDto;
         }
 
-        public AttachmentDto Add(Guid issueId, AttachmentDto attachmentDto)
+        public AttachmentDto AddAttachment(Guid issueId, AttachmentDto attachmentDto)
         {
             var issue = _issueRepository.FindById(issueId);
 
@@ -58,7 +60,7 @@ namespace BTT.Application.Services.Issues
             return attachmentDto;
         }
 
-        public CommentDto Add(Guid issueId, CommentDto commentDto)
+        public CommentDto AddComment(Guid issueId, CommentDto commentDto)
         {
             var issue = _issueRepository.FindById(issueId);
 
@@ -91,8 +93,11 @@ namespace BTT.Application.Services.Issues
                 );
 
             issue.ChangeDescription(issueDto.Description);        
+           
             issue.ChangeName(issueDto.Title);
+            
             issue.ChangePriority(issueDto.Priority);
+            
             issue.ChangeDueDate(issueDto.EndDueDate);
 
             _unitOfWork.Commit();
@@ -108,6 +113,35 @@ namespace BTT.Application.Services.Issues
                 throw new IssueNotFoundException("Issue with this Id was not found.");
 
             return _mapper.Map<Issue, IssueDto>(issue);
+        }
+
+        public IEnumerable<IssueDto> GetAllbyMemberId(Guid memberId)
+        {
+            var member = _issueRepository.GetAll().Where(i => i.MemberId == memberId).FirstOrDefault();
+
+            if (member == null)
+                throw new MemberNotFoundException("Member was not found by this id");
+
+            ISpecification<Issue> issuesByMember = new IssueByMemberSpecification(memberId);
+
+            IEnumerable<Issue> issues = _issueRepository.Find(issuesByMember);
+
+            if (issues == null)
+                throw new IssueNotFoundException("No issues was found assigned for this member.");
+
+            return _mapper.Map<IEnumerable<Issue>, IEnumerable<IssueDto>>(issues);
+        }
+
+        public IEnumerable<IssueDto> GetAllbyProjectId(Guid projectId)
+        {
+            ISpecification<Issue> issuesInProject = new IssueExistsInProjectSpecification(projectId);
+
+            IEnumerable<Issue> issues = _issueRepository.Find(issuesInProject);
+
+            if (issues is null)
+                throw new IssueNotFoundException("No issues was found for this particular project.");
+
+            return _mapper.Map<IEnumerable<Issue>, IEnumerable<IssueDto>>(issues);
         }
 
         public void Remove(Guid issueId)

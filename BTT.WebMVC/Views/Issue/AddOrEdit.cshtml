@@ -1,41 +1,74 @@
 ﻿@model BTT.WebMVC.Models.ViewModels.IssueViewModel
+@using BTT.WebMVC.Models.ViewModels;
 
 @{
     Layout = null;
+
+    List<string> members = new List<string>()
+    {
+        "Brendon",
+        "Jacques"
+    };
+
+    List<string> projects = new List<string>()
+    {
+        "Project 1",
+        "Project 2"
+    };
 }
+
 @using (Html.BeginForm("AddOrEdit", "Issue", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
 {
     <div>
-        <div class="modal-header">
-            <h4 class="modal-title text-dark">Create Bug</h4>
+        <div class="modal-header" style="background-color: #86C136">
+            <h4 class="modal-title text-white">Create Bug</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span class="text-dark" aria-hidden="true">&times;</span>
+                <span class="text-white" aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-6">
                     @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.DateCreated)
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Title, new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                        <label asp-for="Title" class="control-label"></label>
+                        <input asp-for="Title" class="form-control" />
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Description, new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.DateCreated, new { @class = "control-label" })
-                        @Html.EditorFor(model => model.DateCreated, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.EndDueDate, new { @class = "control-label" })
-                        @Html.EditorFor(model => model.EndDueDate, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Priority, new { @class = "control-label" })
-                        @Html.DropDownListFor(model => model.Priority, Html.GetEnumSelectList(typeof(BTT.Domain.Models.Issues.Priority)), 
+                        <label asp-for="Priority" class="control-label"></label>
+                        @Html.DropDownListFor(model => model.Priority, Html.GetEnumSelectList(typeof(BTT.Domain.Models.Issues.Priority)),
                         null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">End Date</label>
+                        <input asp-for="EndDueDate" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="Attachments" class="control-label"></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" for="inputGroupFileAddon">Upload</span>
+                            </div>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile" aria-describedby="inputGroupFileAddon">
+                                <label class="custom-file-label" for="inputGroupFile">Choose File</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Project Assigned</label>
+                        @Html.DropDownListFor(model => model.AssignedProjectName, new SelectList(projects), null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Member Assigned</label>
+                        @Html.DropDownListFor(model => model.AssignedMemberName, new SelectList(members), null, new { @class = "form-control" })
                     </div>
                 </div>
             </div>

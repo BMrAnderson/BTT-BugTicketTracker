@@ -8,9 +8,7 @@
     <title>@ViewData["Title"] - BTT.WebMVC</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/navbarstyles.css" />
-    <link href="~/lib/jquery/jquery-ui.min.css" rel="stylesheet" />
 </head>
 <body>
     <div class="d-flex">
@@ -20,28 +18,28 @@
                 <div><img src="~/Icons/bug.png" class="mb-2" /> <span class="title-brand font-weight-light"> Bug Tracker</span></div>
             </div>
             <div class="list-group list-group-flush font-weight-light">
-                <a asp-controller="Dashboard" action="Index"
+                <a asp-controller="Dashboard" asp-action="Index"
                    class="@Html.IsSelected(controller: "Dashboard",action: "Index") list-group-item list-group-item-action bg-transparent">
                     <i class="fa-fw fas fa-chart-line"></i>
                     <span>Dashboard</span>
                 </a>
-                <a asp-controller="Member" action="Index"
+                <a asp-controller="Member" asp-action="Index"
                    class="@Html.IsSelected(controller: "Member",action: "Index") list-group-item list-group-item-action bg-transparent">
                     <i class="fa-fw fas fa-users"></i>
                     <span>Members Roles</span>
                 </a>
-                <a asp-controller="Project" action="Index"
+                <a asp-controller="Project" asp-action="Index"
                    class="@Html.IsSelected(controller: "Project", action: "Index") list-group-item list-group-item-action bg-transparent">
                     <i class="fa-fw fas fa-project-diagram"></i>
                     <span>Project Tickets</span>
                 </a>
-                <a asp-controller="Issue" action="Index"
+                <a asp-controller="Issue" asp-action="Index"
                    class="@Html.IsSelected(controller: "Issue", action: "Index") list-group-item list-group-item-action bg-transparent">
                     <i class="fa-fw fas fa-bug"></i>
                     <span> Bug Tickets</span>
                 </a>
-                <a asp-controller="Account" action="Index"
-                   class="@Html.IsSelected(controller: "Account", action: "Index")list-group-item list-group-item-action bg-transparent">
+                <a asp-controller="Account" asp-action="Profile"
+                   class="@Html.IsSelected(controller: "Account", action: "Profile") list-group-item list-group-item-action bg-transparent">
                     <i class="fa-fw fas fa-user-circle"></i>
                     <span>My Profile</span>
                 </a>
@@ -49,15 +47,22 @@
         </nav>
         <!-- /#sidebar-wrapper -->
         <div id="page-content-wrapper">
-            <nav class="nav navbar-expand  bg-green-gradient p-2 shadow">
+            <nav id="top-nav" class="nav navbar-expand justify-content-end bg-green-gradient p-2 shadow">
                 <a class="navbar-brand" href="#"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-text text-white">Welcome, Brendon!</div>
-                <div class="nav-item align-content-end">
-                    <div class="img-thumbnail"></div>
+                <span class="text-white mr-3 mt-2" href="#">Admin</span>
+                <div class="dropdown mr-5">
+                  <img style="cursor:pointer" src="~/Icons/default-avatar.png" width="44" height="44" class="dropdown-toggle mr-3" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" /> 
+                    <div class="dropdown-menu shadow mr-5 mt-3 fade"  aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile">My Profile</a>
+                        <a class="dropdown-item" href="#">Messages</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="LogIn">Log Out</a>
+                    </div>
                 </div>
+
             </nav>
             <div>
                 <main role="main" class="pb-3">

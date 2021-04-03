@@ -17,7 +17,6 @@ namespace BTT.Application.Services.Projects
     {
         private readonly IRepository<Project> _projectRepository;
         private readonly IRepository<Member> _memberRepository;
-        private readonly IRepository<Issue> _issueRepository;
         private readonly IRepository<Organization> _organizationRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper; 
@@ -26,12 +25,10 @@ namespace BTT.Application.Services.Projects
             (IRepository<Project> projectRepository, 
              IRepository<Member> memberRepository, 
              IRepository<Organization> organizationRepository, 
-             IRepository<Issue> issueRepository, 
              IUnitOfWork unitOfWork, IMapper mapper)
         {
             this._projectRepository = projectRepository;
             this._memberRepository = memberRepository;
-            this._issueRepository = issueRepository;
             this._organizationRepository = organizationRepository;
             this._unitOfWork = unitOfWork;
             this._mapper = mapper;

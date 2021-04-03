@@ -73,10 +73,6 @@ body {
 /*Loaders and form styles
 -------------------------------------*/
 
-/* Change input control border color */
-.form-control, .input-group-text {
-    border: 1px solid #86C136;
-}
 
 a.btn:hover {
     cursor: pointer !important;

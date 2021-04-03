@@ -23,6 +23,10 @@ namespace BTT.WebMVC.Extensions.Routing
                 endpoints.MapControllerRoute(
                     name: "DemoAccountPage",
                     pattern: "{controller=Account}/{action=LoginAsDemoAccount}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "ProfilePage",
+                    pattern: "{controller=Account}/{action=Profile}/{id?}");
             });
 
             //Add new endpoints here

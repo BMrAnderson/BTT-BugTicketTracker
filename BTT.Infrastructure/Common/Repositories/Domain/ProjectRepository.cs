@@ -1,49 +1,23 @@
 ﻿using BTT.Domain.Common.Repository;
 using BTT.Domain.Common.Specification;
 using BTT.Domain.Models.Projects;
+using BTT.Infrastructure.Common.Persistence;
 using BTT.Infrastructure.Domain.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BTT.Infrastructure.Common.Repositories
 {
-    public class ProjectRepository : IRepository<Project>
-    {
-        private readonly EFRepository<Project> _efProjectRepository;
-
-        public ProjectRepository(EFRepository<Project> projectRepository)
+    public class ProjectRepository : EFRepository<Project>, IProjectRepository
+    {     
+        public ProjectRepository(IssueTicketTrackerDBContext context): base(context)
         {
-            this._efProjectRepository = projectRepository;
         }
 
-        public void Add(Project entity)
+        public IEnumerable<Project> GetProjectsByDueDate(DateTime dateTime)
         {
-            _efProjectRepository.Add(entity);
-        }
-
-        public IEnumerable<Project> Find(ISpecification<Project> spec)
-        {
-            return _efProjectRepository.Find(spec);
-        }
-
-        public Project FindById(Guid id)
-        {
-            return _efProjectRepository.FindById(id);
-        }
-
-        public Project FindOne(ISpecification<Project> spec)
-        {
-            return _efProjectRepository.FindOne(spec);
-        }
-
-        public IEnumerable<Project> GetAll()
-        {
-            return _efProjectRepository.GetAll();
-        }
-
-        public void Remove(Project entity)
-        {
-            _efProjectRepository.Remove(entity);
+           return this._entities.Where(p => p.EndDueDate == dateTime);
         }
     }
 }

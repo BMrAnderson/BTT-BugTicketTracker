@@ -23,10 +23,18 @@ namespace BTT.Application
                        .AddMediatR(Assembly.GetExecutingAssembly());
 
         private static IServiceCollection AddDomainServices(this IServiceCollection services)
-            => services.Scan(scan =>
-                    scan.FromCallingAssembly()
-                        .AddClasses()
-                        .AsMatchingInterface()
-                        .WithTransientLifetime());
+        {
+            services.AddTransient<IIssueViewModelService, IssueService>();
+            services.AddTransient<IMemberService, MemberService>();
+            services.AddTransient<IProjectService, ProjectService>();
+            services.AddTransient<IOrganizationService, OrganizationService>();
+
+            return services;
+        }
+            //=> services.Scan(scan =>
+            //        scan.FromCallingAssembly()
+            //            .AddClasses()
+            //            .AsMatchingInterface()
+            //            .WithTransientLifetime());
     }
 }

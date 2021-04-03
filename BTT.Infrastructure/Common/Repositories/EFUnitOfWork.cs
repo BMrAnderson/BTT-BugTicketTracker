@@ -1,4 +1,8 @@
 ﻿using BTT.Domain.Common.Repository;
+using BTT.Domain.Models.Issues;
+using BTT.Domain.Models.Members;
+using BTT.Domain.Models.Organizations;
+using BTT.Domain.Models.Projects;
 using BTT.Infrastructure.Common.Persistence;
 using System.Threading.Tasks;
 
@@ -13,6 +17,14 @@ namespace BTT.Infrastructure.Common.Repositories
             _context = context;
         }
 
+        public IIssueRepository Issues { get; private set; }
+
+        public IOrganizationRepository Organizations { get; private set; }
+
+        public IMemberRepository Members { get; private set; }
+
+        public IProjectRepository Projects { get; private set; }
+
         public async Task<int> Commit()
         {
             return await _context.SaveChangesAsync();
@@ -21,11 +33,6 @@ namespace BTT.Infrastructure.Common.Repositories
         public ValueTask DisposeAsync()
         {
             return _context.DisposeAsync();
-        }
-
-        public void RollBack()
-        {
-            _context.Database.RollbackTransaction();
         }
     }
 }

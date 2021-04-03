@@ -14,9 +14,9 @@ namespace BTT.WebMVC.Models.ViewModels
         public DateTime DateCreated { get; set; }
         public DateTime EndDueDate { get; set; }
         public Priority Priority { get; set; }
-        //public List<CommentViewModel> Comments { get; set; }
-        //public List<AttachmentViewModel> Attachments { get; set; }
-        //public Guid MemberId { get; set; }
-        //public Guid ProjectId { get; set; }
+        public List<CommentViewModel> Comments { get; set; }
+        public List<AttachmentViewModel> Attachments { get; set; }
+        public string AssignedMemberName { get; set; }
+        public string AssignedProjectName { get; set; }
     }
 }

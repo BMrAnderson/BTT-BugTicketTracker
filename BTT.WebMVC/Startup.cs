@@ -1,4 +1,5 @@
 using BTT.WebMVC.Extenstions.Routing;
+using BTT.WebMVC.Extensions.HTTP;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +26,7 @@ namespace BTT.WebMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.RegisterApplicationHttpClients();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

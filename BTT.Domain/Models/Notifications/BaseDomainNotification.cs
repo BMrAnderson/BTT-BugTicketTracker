@@ -8,6 +8,8 @@ namespace BTT.Domain.Models.Notifications
 {
     public class BaseDomainNotification : INotification
     {
+        private BaseDomainNotification() { }
+
         public BaseDomainNotification(string message)
         {
             this.Id = Guid.NewGuid();
@@ -15,7 +17,7 @@ namespace BTT.Domain.Models.Notifications
             DateCreated = DateTime.Now;
         }
 
-        public Guid Id { get; }
+        public Guid Id { get; private set; }
 
         public string Message { get; protected set; }
 

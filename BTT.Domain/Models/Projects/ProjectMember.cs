@@ -6,6 +6,8 @@ namespace BTT.Domain.Models.Projects
 {
     public class ProjectMember 
     {
+        private ProjectMember() { }
+
         public ProjectMember(Project project, Member member)
         {
             Validate(project, member);
