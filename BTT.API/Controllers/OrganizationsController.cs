@@ -77,34 +77,49 @@ namespace BTT.API.Controllers
             }
         }
 
-        //[HttpPost("o={organizationId}")]
-        //public IActionResult Add(Guid organizationId, [FromBody] MemberDto memberDto)
-        //{
-           
-        //    try
-        //    {
+        [HttpPost("o={organizationId}")]
+        public IActionResult Add(Guid organizationId, [FromBody] MemberDto memberDto)
+        {
+            try
+            {
+                var org = _organizationService.Get(organizationId);
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-               
-        //    }
-        //    return result;
-        //}
+                if (org != null)
+                {
+                    var member = _organizationService.Add(organizationId, memberDto);
 
-        //[HttpDelete("o={organizationId}")]
-        //public IActionResult Remove(Guid organizationId)
-        //{
+                    return Created($"/api/organizations/{organizationId}", memberDto);
+                }
+                return NotFound(org);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+        }
 
-        //    try
-        //    {
+        [HttpDelete("o={organizationId}")]
+        public IActionResult Remove(Guid organizationId)
+        {
+            try
+            {
+                var org = _organizationService.Get(organizationId);
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-       
-        //    }
+                if (org != null)
+                {
+                    _organizationService.Remove(organizationId);
 
-        //}
+                    return Ok(org);
+                }
+                return NotFound(organizationId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+
+        }
     }
 }
