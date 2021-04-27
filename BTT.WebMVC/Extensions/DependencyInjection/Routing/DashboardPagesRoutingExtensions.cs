@@ -4,17 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BTT.WebMVC.Extensions.Routing
+namespace BTT.WebMVC.Extensions.DependencyInjection.Routing
 {
-    public static class ProjectPagesRoutingExtensions
+    public static class DashboardPagesRoutingExtensions
     {
-        public static IApplicationBuilder AddRoutingForProjectPages(this IApplicationBuilder builder)
+        public static IApplicationBuilder AddRoutingForDashboardPages(this IApplicationBuilder builder)
         {
             builder.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "ProjectIndexPage",
-                    pattern: "{controller=Project}/{action=Index}/{id?}");
+                    name: "default",
+                    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
             });
             //Add new endpoints here
 

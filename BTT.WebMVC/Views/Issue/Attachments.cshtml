@@ -1,41 +1,38 @@
-﻿@using BTT.WebMVC.Extensions.HTML;
-
+﻿@model IEnumerable<BTT.WebMVC.Models.ViewModels.AttachmentViewModel>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Attachments";
 }
 
-<div id="top-content" class="container-fluid">
-    <p class="display-4 float-left" style="font-size: 30px">My Bugs</p>
-    <button id="submit-btn" class="btn btn-success float-right"
-            onclick="PopupForm('@Url.Action("AddOrEdit","Issue")')">
-        Submit Bug <i class="fas fa-plus"></i>
-    </button>
+<div class="container">
+    <div style="display:flex" class="justify-content-between">
+        <h3>Attachments</h3>
+        <button class="btn btn-dark">Add Attachement</button>
+    </div>
+    <hr />
+    <div class="container-fluid mt-3">
+        <table class="display table table-striped mt-5" style="width:100%" id="datatable">
+            <thead class="thead-dark" style="opacity: 0.9;">
+                <tr>
+                    <th>File</th>
+                    <th>Description</th>
+                    <th>Size</th>
+                    <th>Date Created</th>
+                    <th>Date Modified</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 
-<hr class="line" />
-
-<div class="container-fluid mt-3">
-    <table class="display table table-striped mt-5" style="width:100%" id="datatable">
-        <thead class="thead-dark" style="opacity: 0.9;">
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>DateCreated</th>
-                <th>EndDueDate</th>
-                <th>Priority</th>
-                <th></th>
-            </tr>
-        </thead>
-    </table>
-</div>
-
-<div id="addIssue" class="modal fade p-5" tabindex="-1" role="dialog" aria-hidden="true">
+<div id="addAttachment" class="modal fade p-5" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document" style="width: 100%; max-width: 1000px;">
         <div id="modalContent" class="modal-content">
 
         </div>
     </div>
 </div>
+
 
 @section scripts{
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
@@ -44,12 +41,6 @@
     <script src="~/js/notify.min.js"></script>
 
     <style>
-        .line {
-            margin-top: 50px;
-            margin-left: 50px;
-            margin-right: 50px;
-            border-bottom: 2px;
-        }
 
         .btn-success, .btn-success:hover, .btn-success:active, btn-success:visited, btn-success:focus {
             background: #86C136;
@@ -61,11 +52,6 @@
 
         i {
             margin-left: 10px
-        }
-
-        #submit-btn {
-            width: 160px;
-            color: white;
         }
 
         .active {
@@ -80,7 +66,6 @@
         .modal-header {
             cursor: move;
         }
-        
     </style>
 
     <script>
@@ -90,32 +75,28 @@
             table = $("#datatable").DataTable({
                 "dom": '<"float-left"f><"float-right"l><t><i><p>',
                 "ajax": {
-                    "url": '/Issue/GetAllIssues',
+                    "url": '/Issue/GetAllAttachments',
                     "type": 'GET',
                     "datatype": "json"
                 },
                 "columns": [
-                    { "data": 'Title' },
+                    { "data": 'File' },
                     { "data": 'Description' },
+                    { "data": 'Size'},
                     { "data": 'DateCreated' },
-                    {
-                        "data": 'EndDueDate', "render": function (data) {
-                            return setDateTimeColor(data);
-                        }
-                    },
-                    {
-                        "data": 'Priority', "render": function (data) {
-                            return setBadgeColor(data);
-                        }
-                    },
+                    { "data": 'DateModified'},
                     {
                         "data": 'Id', "render": function (id) {
-                            return '<a href="@Url.Action("Edit", "Issue")/' + id + '" class="btn btn-secondary text-white" > <i class="fas fa-pencil-alt"></i> Edit</a > '
+                            return '<a href="@Url.Action("Remove", "Issue")/' + id + '" class="btn btn-secondary text-white" > <i class="fas fa-pencil-alt"></i> Edit</a > '
                         }
                     }
                 ]
             });
         });
+
+        function DeleteAttachement(id) {
+            var url = '@Url.Action("DeleteAttachment", "Issue")/' + id;
+        }
 
         function PopupForm(url) {
             $('#addIssue').draggable({
@@ -191,7 +172,7 @@
             var badgeClass = 'badge '
             var result = '';
 
-            switch (data) {
+    Url       switch (data) {
                 case 0:
                     result = 'Low';
                     badgeClass += 'badge-success';
@@ -209,3 +190,5 @@
         }
     </script>
 }
+
+

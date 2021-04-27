@@ -1,4 +1,5 @@
 ﻿using BTT.WebMVC.Models.ViewModels;
+using BTT.WebMVC.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,14 @@ namespace BTT.WebMVC.Controllers
 {
     public class ProjectController : Controller
     {
+        private readonly IProjectHttpService _projectHttpService;
+        
         private static List<ProjectViewModel> projects = new List<ProjectViewModel>();
+
+        public ProjectController(IProjectHttpService projectHttpService)
+        {
+            this._projectHttpService = projectHttpService;
+        }
 
         public IActionResult Index()
         {

@@ -8,6 +8,7 @@ namespace BTT.WebMVC.Models.ViewModels
     public class CommentViewModel
     {
         public Guid IssueId { get; set; }
+        public string Username { get; set; }
         public string Text { get; set; }
         public DateTime DateCreated { get; set; }
     }

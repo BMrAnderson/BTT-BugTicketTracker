@@ -1,9 +1,7 @@
-﻿using BTT.API.Models;
-using BTT.Application.Exceptions;
-using BTT.Application.Services.Issues;
+﻿using BTT.Application.Services.Issues;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,166 +12,149 @@ namespace BTT.API.Controllers
     public class IssuesController : ControllerBase
     {
         private readonly IIssueService _issueService;
+        private readonly ILogger<IssuesController> _logger;
 
-        public IssuesController(IIssueService issueService)
+        public IssuesController(IIssueService issueService, ILogger<IssuesController> logger)
         {
             this._issueService = issueService;
+            this._logger = logger;
         }
 
         [HttpGet("i={issueId}")]
-        public Response<IssueDto> Get(Guid issueId)
+        public IActionResult Get(Guid issueId)
         {
-            var result = new Response<IssueDto>();
             try
             {
-                result.Result = new IssueDto()
-                {
-                    Id = Guid.NewGuid(),
-                    Title = "Awe",
-                    Description = "Test",
-                    DateCreated = DateTime.Now,
-                    EndDueDate = DateTime.Now.AddDays(1),
-                    Priority = Domain.Models.Issues.Priority.High
-                };
+                var issue = _issueService.Get(issueId);
+                if (issue != null) return Ok(issue);
             }
             catch (Exception ex)
             {
-                result.ExceptionType = ex.ToString();
-                result.StackTrace = ex.StackTrace;
-                result.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
+            return NotFound();
         }
 
         // GET: api/issues/d49c3220-6f7b-45ec-982f-c4039de87b81
         [HttpGet("m={memberId}")]
-        public Response<IEnumerable<IssueDto>> GetByMember(Guid memberId)
+        public IActionResult GetByMember(Guid memberId)
         {
-            var result = new Response<IEnumerable<IssueDto>>();
             try
             {
-                result.Result = _issueService.GetAllbyMemberId(memberId);
+                var issues = _issueService.GetAllbyMemberId(memberId);
+                if (issues != null) return Ok(issues);
             }
-            catch (MemberNotFoundException ex)
+            catch (Exception ex)
             {
-                result.ExceptionType = ex.ToString();
-                result.StackTrace = ex.StackTrace;
-                result.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
+            return NotFound();
         }
 
         // GET api/<IssuesController>/5
         [HttpGet("p={projectId}")]
-        public Response<IEnumerable<IssueDto>> GetByProject(Guid projectId)
+        public IActionResult GetByProject(Guid projectId)
         {
-            var result = new Response<IEnumerable<IssueDto>>();
             try
             {
-                result.Result = _issueService.GetAllbyProjectId(projectId);
+                var issues = _issueService.GetAllbyProjectId(projectId);
+                if (issues != null) return Ok(issues);
             }
             catch (Exception ex)
             {
-                result.ExceptionType = ex.ToString();
-                result.StackTrace = ex.StackTrace;
-                result.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
+            return NotFound();
         }
 
         // POST api/<IssuesController>
         [HttpPost]
-        public Response<IssueDto> Add([FromBody] IssueDto issueDto)
+        public IActionResult Add([FromBody] IssueDto issueDto)
         {
-            var result = new Response<IssueDto>();
             try
             {
                 _issueService.Add(issueDto);
-
-                result.Message = "Submitted successfully";
+                return Created($"/api/issues/{issueDto.Id}", issueDto);
+                
             }
             catch (Exception ex)
             {
-                result.ExceptionType = ex.ToString();
-                result.StackTrace = ex.StackTrace;
-                result.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
         }
 
         // PUT api/<IssuesController>/5
         [HttpPut]
-        public ResponseMessage Update([FromBody] IssueDto issueDto)
+        public IActionResult Update([FromBody] IssueDto issueDto)
         {
-            var result = new ResponseMessage();
             try
             {
-                _issueService.Edit(issueDto);
-
-                result.Message = "Updated Successfully";
+                if (ModelState.IsValid)
+                {
+                    _issueService.Edit(issueDto);
+                    return Ok(issueDto);
+                }
+                return StatusCode(304, issueDto);
             }
             catch (Exception ex)
             {
-                result.ExceptionType = ex.ToString();
-                result.StackTrace = ex.StackTrace;
-                result.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
         }
 
         [HttpPut("{issueId}")]
-        public Response<AttachmentDto> Add(Guid issueId, [FromBody] AttachmentDto attachmentDto)
+        public IActionResult Add(Guid issueId, [FromBody] AttachmentDto attachmentDto)
         {
-            var result = new Response<AttachmentDto>();
             try
             {
-                result.Result = _issueService.AddAttachment(issueId, attachmentDto);
+                var attachment = _issueService.AddAttachment(issueId, attachmentDto);
+                if (attachment != null) return Created($"/api/issues/{issueId}", attachment);
             }
             catch (Exception ex)
             {
-                result.ExceptionType = ex.ToString();
-                result.StackTrace = ex.StackTrace;
-                result.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
+            return BadRequest();
         }
 
         [HttpPut("{issueId}")]
-        public Response<CommentDto> Add(Guid issueId, [FromBody] CommentDto commentDto)
+        public IActionResult Add(Guid issueId, [FromBody] CommentDto commentDto)
         {
-            var result = new Response<CommentDto>();
             try
             {
-                result.Result = _issueService.AddComment(issueId, commentDto);
+                var comment = _issueService.AddComment(issueId, commentDto);
+                if (comment != null) return Created($"api/issues/{issueId}", comment);
             }
             catch (Exception ex)
             {
-                result.ExceptionType = ex.ToString();
-                result.StackTrace = ex.StackTrace;
-                result.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
+            return BadRequest();
         }
 
 
         // DELETE api/<IssuesController>/5
         [HttpDelete("{issueId}")]
-        public ResponseMessage Delete(Guid issueId)
+        public IActionResult Delete(Guid issueId)
         {
-            var result = new ResponseMessage();
             try
             {
-                _issueService.Remove(issueId);
-
-                result.Message = "Deleted successfully";
+                var issue = _issueService.Remove(issueId);
+                if (issue != null) return Ok();
             }
             catch (Exception ex)
             {
-                result.ExceptionType = ex.ToString();
-                result.StackTrace = ex.StackTrace;
-                result.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
+            return BadRequest();
         }
     }
 }

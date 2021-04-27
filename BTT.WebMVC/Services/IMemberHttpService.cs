@@ -8,11 +8,11 @@ namespace BTT.WebMVC.Services
 {
     public interface IMemberHttpService
     {
-        bool EmailExists(string email);
-        void Remove(Guid memberId);
-        void Edit(MemberViewModel memberVM);
-        MemberViewModel Get(Guid memberId);
-        MemberViewModel Add(MemberViewModel memberVM);
-        ProjectViewModel Add(Guid memberId, ProjectViewModel projectVM);
+        Task<bool> EmailExists(string email);
+        Task<bool> Remove(Guid memberId);
+        Task<bool> Edit(MemberViewModel memberVM);
+        Task<MemberViewModel> Get(Guid memberId);
+        Task<bool> Add(MemberViewModel memberVM);
+        Task<bool> Add(Guid memberId, ProjectViewModel projectVM);
     }
 }

@@ -8,11 +8,11 @@ namespace BTT.WebMVC.Services
 {
     public interface IProjectHttpService
     {
-        ProjectViewModel Get(Guid projectId);
-        ProjectViewModel Add(ProjectViewModel projectVM);
-        void Remove(Guid projectId);
-        void Edit(ProjectViewModel projectVM);
-        MemberViewModel Add(Guid projectId, MemberViewModel memberVM);
-        IssueViewModel Add(Guid memberId, Guid projectId, IssueViewModel issueVM);
+        Task<ProjectViewModel> Get(Guid projectId);
+        Task<bool> Add(ProjectViewModel projectVM);
+        Task<bool> Remove(Guid projectId);
+        Task<bool> Edit(ProjectViewModel projectVM);
+        Task<bool> Add(Guid projectId, MemberViewModel memberVM);
+        Task<bool> Add(Guid memberId, Guid projectId, IssueViewModel issueVM);
     }
 }

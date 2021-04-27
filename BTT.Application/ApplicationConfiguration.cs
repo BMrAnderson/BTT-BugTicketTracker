@@ -24,7 +24,7 @@ namespace BTT.Application
 
         private static IServiceCollection AddDomainServices(this IServiceCollection services)
         {
-            services.AddTransient<IIssueViewModelService, IssueService>();
+            services.AddTransient<IIssueService, IssueService>();
             services.AddTransient<IMemberService, MemberService>();
             services.AddTransient<IProjectService, ProjectService>();
             services.AddTransient<IOrganizationService, OrganizationService>();

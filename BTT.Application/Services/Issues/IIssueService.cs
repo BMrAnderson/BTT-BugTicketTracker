@@ -7,12 +7,14 @@ namespace BTT.Application.Services.Issues
     public interface IIssueService
     {
         IssueDto Get(Guid issueId);
-        bool Add(IssueDto issueDto);
+        IEnumerable<AttachmentDto> GetAttachments(Guid issueId);
+        IEnumerable<CommentDto> GetComments(Guid issueId);
+        IssueDto Add(IssueDto issueDto);
         IEnumerable<IssueDto> GetAllbyMemberId(Guid memberId);
         IEnumerable<IssueDto> GetAllbyProjectId(Guid projectId);
         AttachmentDto AddAttachment(Guid issueId, AttachmentDto attachment);
         CommentDto AddComment(Guid issueId, CommentDto comment);
         void Edit(IssueDto issueDto);
-        void Remove(Guid issueId);
+        IssueDto Remove(Guid issueId);
     }
 }

@@ -1,0 +1,99 @@
+﻿@model BTT.WebMVC.Models.ViewModels.IssueViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+
+    List<SelectListItem> memberItems = new List<SelectListItem>()
+{
+        new SelectListItem("Member 1", "Member 1"),
+        new SelectListItem("Member 2", "Member 2")
+    };
+
+    List<SelectListItem> projectItems = new List<SelectListItem>()
+{
+        new SelectListItem("Project 1", "Project 1"),
+        new SelectListItem("Project 2", "Project 2")
+    };
+
+    IEnumerable<SelectListItem> levelItems = Html.GetEnumSelectList(typeof(BTT.Domain.Models.Issues.Priority));
+}
+
+<div class="container mt-5 shadow bg-white">
+    <div class="justify-content-between" style="display:flex">
+        <h3 class="float-left">Bug Details</h3>
+        <button id="btnDelete" class="btn"><i class="fas fa-times"></i></button>
+    </div>
+    <hr />
+    <form asp-action="Edit">
+        <div class="row">
+            <div class="col-md-6">
+                <input hidden asp-for="Id" />
+                <input hidden asp-for="DateCreated" />
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Priority" class="control-label"></label>
+                    <select asp-for="Priority" asp-items="levelItems" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">End Date</label>
+                    <input asp-for="EndDueDate" class="form-control" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label class="control-label">Project Assigned</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" type="button" id="addProjectButton">Create</button>
+                        </div>
+                        <select aria-describedby="addProjectButton" asp-for="AssignedProjectName" asp-items="projectItems" class="form-control" id="projectSelectList"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Member Assigned</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" type="button" id="addMemberButton">Create</button>
+                        </div>
+                        <select aria-describedby="addMemberButton" asp-for="AssignedMemberName" asp-items="memberItems" class="form-control" id="memberSelectList"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <a href="@Url.Action("Attachments","Issue", new { issueId = Model.Id })">Attachments</a>
+                    <a href="@Url.Action("Comments","Issue", new { issueId = Model.Id })">Comments</a>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success" type="submit">Save</button>
+                    <button class="btn btn-outline-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <style>
+        .btn-success, .btn-success:hover, .btn-success:active, btn-success:visited, btn-success:focus {
+            background: #86C136;
+            background: -webkit-linear-gradient(right, #86C136, #67BA2E);
+            background: -moz-linear-gradient(right, #86C136, #67BA2E);
+            background: linear-gradient(to left, #86C136, #67BA2E);
+            border-color: #86C136;
+        }
+
+        #btnDelete:hover {
+            color: orangered;
+        }
+    </style>
+}

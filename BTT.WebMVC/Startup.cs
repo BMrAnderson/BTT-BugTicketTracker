@@ -1,5 +1,5 @@
-using BTT.WebMVC.Extenstions.Routing;
-using BTT.WebMVC.Extensions.HTTP;
+using BTT.WebMVC.Extenstions.DependencyInjection.Routing;
+using BTT.WebMVC.Extensions.DependencyInjection.HTTP;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace BTT.WebMVC
 {
@@ -26,7 +27,7 @@ namespace BTT.WebMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.RegisterApplicationHttpClients();
+            services.ConfigureWebServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,7 +49,7 @@ namespace BTT.WebMVC
             app.UseRouting();
 
             app.UseAuthorization();
-            app.ConfigureApplicationEndpointRouting();
+            app.ConfigureWebEndpointRouting();
         }
     }
 }

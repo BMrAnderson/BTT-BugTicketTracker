@@ -1,41 +1,76 @@
-﻿using BTT.WebMVC.Models.ViewModels;
+﻿using AutoMapper;
+using BTT.Application.Services.Members;
+using BTT.Application.Services.Projects;
+using BTT.WebMVC.Models.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BTT.WebMVC.Services
 {
     public class MemberHttpService : IMemberHttpService
     {
-        public MemberViewModel Add(MemberViewModel memberVM)
+        private readonly HttpClient _httpClient;
+        private readonly IMapper _mapper;
+
+        public MemberHttpService(HttpClient httpClient, IMapper mapper)
         {
-            throw new NotImplementedException();
+            this._httpClient = httpClient;
+            this._mapper = mapper;
         }
 
-        public ProjectViewModel Add(Guid memberId, ProjectViewModel projectVM)
+        public async Task<bool> Add(MemberViewModel memberVM)
         {
-            throw new NotImplementedException();
+            var memberDto = _mapper.Map<MemberViewModel, MemberDto>(memberVM);
+
+            var memberDtoContent = new StringContent(JsonSerializer.Serialize(memberDto), Encoding.UTF8, "application/json");
+
+            var postTask = await _httpClient.PostAsync(string.Empty, memberDtoContent);
+
+            return postTask.IsSuccessStatusCode;
         }
 
-        public void Edit(MemberViewModel memberVM)
+        public async Task<bool> Add(Guid memberId, ProjectViewModel projectVM)
         {
-            throw new NotImplementedException();
+            var projectDto = _mapper.Map<ProjectViewModel, ProjectDto>(projectVM);
+
+            var projectDtoContent = new StringContent(JsonSerializer.Serialize(projectDto), Encoding.UTF8, "application/json");
+
+            var postTask = await _httpClient.PostAsync($"m={memberId}", projectDtoContent);
+
+            return postTask.IsSuccessStatusCode;
         }
 
-        public bool EmailExists(string email)
+        public async Task<bool> Edit(MemberViewModel memberVM)
         {
-            throw new NotImplementedException();
+            var memberDto = _mapper.Map<MemberViewModel, MemberDto>(memberVM);
+
+            var memberDtoContent = new StringContent(JsonSerializer.Serialize(memberDto), Encoding.UTF8, "application/json");
+
+            var putTask = await _httpClient.PutAsync(string.Empty, memberDtoContent);
+
+            return putTask.IsSuccessStatusCode;
         }
 
-        public MemberViewModel Get(Guid memberId)
+        public async Task<bool> EmailExists(string email)
         {
-            throw new NotImplementedException();
+            return await _httpClient.GetFromJsonAsync<bool>($"{email}");
         }
 
-        public void Remove(Guid memberId)
+        public async Task<MemberViewModel> Get(Guid memberId)
         {
-            throw new NotImplementedException();
+            return await JsonSerializer.DeserializeAsync<MemberViewModel>
+                 (await _httpClient.GetStreamAsync($"m={memberId}"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+
+        public async Task<bool> Remove(Guid memberId)
+        {
+            var deleteTask = await _httpClient.DeleteAsync($"m={memberId}");
+
+            return deleteTask.IsSuccessStatusCode;
         }
     }
 }

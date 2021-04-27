@@ -1,8 +1,7 @@
-﻿using BTT.API.Models;
-using BTT.Application.Services.Members;
+﻿using BTT.Application.Services.Members;
 using BTT.Application.Services.Projects;
-using BTT.API.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace BTT.API.Controllers
@@ -12,105 +11,111 @@ namespace BTT.API.Controllers
     public class MembersController : ControllerBase
     {
         private readonly IMemberService _memberService;
+        private readonly ILogger<MembersController> _logger;
 
-        public MembersController(IMemberService memberService)
+        public MembersController(IMemberService memberService, ILogger<MembersController> logger)
         {
             this._memberService = memberService;
+            this._logger = logger;
         }
 
-        [HttpGet("{memberId}")]
-        public Response<MemberDto> Get(Guid memberId)
+        [HttpGet("m={memberId}")]
+        public IActionResult Get(Guid memberId)
         {
-            var result = new Response<MemberDto>();
             try
             {
-                result.Result = _memberService.Get(memberId);
+                var member = _memberService.Get(memberId);
+                if (member != null) return Ok(member);
             }
             catch (Exception ex)
             {
-                result = ex.SanitizeException<MemberDto>();
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
+            return NotFound();
         }
 
         [HttpPost]
-        public Response<MemberDto> Add([FromBody]MemberDto memberDto)
+        public IActionResult Add([FromBody] MemberDto memberDto)
         {
-            var result = new Response<MemberDto>();
             try
             {
-                result.Result = _memberService.Add(memberDto);
-                result.Message = "Successfully added Member";
+                _memberService.Add(memberDto);
+                return Created($"/api/members/{memberDto.Id}", memberDto);
             }
             catch (Exception ex)
             {
-                result = ex.SanitizeException<MemberDto>();
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
         }
 
-        [HttpPost("{memberId}")]
-        public Response<ProjectDto> Add(Guid memberId,[FromBody]ProjectDto projectDto)
+        [HttpPost("m={memberId}")]
+        public IActionResult Add(Guid memberId, [FromBody] ProjectDto projectDto)
         {
-            var result = new Response<ProjectDto>();
             try
             {
-                result.Result = _memberService.Add(memberId, projectDto);
-                result.Message = "Successfully added project.";
+                var project = _memberService.Add(memberId, projectDto);
+                if (project != null) return Created($"/api/projects/{memberId}", project);
             }
             catch (Exception ex)
             {
-                result = ex.SanitizeException<ProjectDto>();
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
+            return BadRequest();
         }
 
-        [HttpDelete("{memberId}")]
-        public ResponseMessage Remove(Guid memberId)
+        [HttpDelete("m={memberId}")]
+        public IActionResult Remove(Guid memberId)
         {
-            var result = new ResponseMessage();
             try
             {
                 _memberService.Remove(memberId);
-                result.Message = "Successfully Removed Member";
+                return Ok();
             }
             catch (Exception ex)
             {
-                result = ex.SanitizeException();
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
         }
 
         [HttpPut]
-        public ResponseMessage Update(MemberDto memberDto)
+        public IActionResult Update(MemberDto memberDto)
         {
-            var result = new ResponseMessage();
             try
             {
-                _memberService.Edit(memberDto);
-                result.Message = "Updated member Successfully";
+                if (ModelState.IsValid)
+                {
+                    _memberService.Edit(memberDto);
+                    return Ok(memberDto);
+                }
+                return StatusCode(304, memberDto);
             }
             catch (Exception ex)
             {
-                result = ex.SanitizeException();
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
         }
 
         [HttpGet]
-        public ResponseMessage EmailExists(string email)
+        public IActionResult EmailExists(string email)
         {
-            var result = new ResponseMessage();
             try
             {
-                _memberService.EmailExists(email);
-                result.Message = "Email found.";
+                bool emailExists = _memberService.EmailExists(email);
+
+                if (emailExists) return Ok(email);
+
+                return NotFound(email);
             }
             catch (Exception ex)
             {
-                result = ex.SanitizeException();
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
         }
     }
 }

@@ -9,13 +9,13 @@ namespace BTT.WebMVC.Services
 {
     public interface IIssueHttpService
     {
-        IssueViewModel Get(Guid issueId);
-        bool Add(IssueViewModel issueVM);
-        IEnumerable<IssueViewModel> GetAllbyMemberId(Guid memberId);
-        IEnumerable<IssueViewModel> GetAllbyProjectId(Guid projectId);
-        bool AddAttachment(Guid issueId, AttachmentViewModel attachmentVM);
-        bool AddComment(Guid issueId, CommentViewModel commentVM);
-        bool Edit(IssueViewModel issueVM);
-        bool Remove(Guid issueId);
+        Task<IssueViewModel> Get(Guid issueId);
+        Task<bool> Add(IssueViewModel issueVM);
+        Task<IEnumerable<IssueViewModel>> GetAllbyMemberId(Guid memberId);
+        Task<IEnumerable<IssueViewModel>> GetAllbyProjectId(Guid projectId);
+        Task<bool> AddAttachment(Guid issueId, AttachmentViewModel attachmentVM);
+        Task<bool> AddComment(Guid issueId, CommentViewModel commentVM);
+        Task<bool> Edit(IssueViewModel issueVM);
+        Task<bool> Remove(Guid issueId);
     }
 }

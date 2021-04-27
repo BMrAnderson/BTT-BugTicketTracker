@@ -19,12 +19,23 @@ namespace BTT.Application
     {
         public ModelMapper()
         {
-            CreateMap<Issue, IssueDto>();
-            CreateMap<Member, MemberDto>();
-            CreateMap<Organization, OrganizationDto>();
-            CreateMap<Project, ProjectDto>();
-            CreateMap<Attachment, AttachmentDto>();
-            CreateMap<Comment, CommentDto>();
+            CreateMap<Issue, IssueDto>()
+                .ReverseMap();
+
+            CreateMap<Member, MemberDto>()
+                .ReverseMap();
+
+            CreateMap<Organization, OrganizationDto>()
+                .ReverseMap();
+
+            CreateMap<Project, ProjectDto>()
+                .ReverseMap();
+
+            CreateMap<Attachment, AttachmentDto>()
+                .ReverseMap();
+
+            CreateMap<Comment, CommentDto>()
+                .ReverseMap();
         }
     }
 }

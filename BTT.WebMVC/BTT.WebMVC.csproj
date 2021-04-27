@@ -6,11 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BTT.API\BTT.API.csproj" />
+    <ProjectReference Include="..\BTT.Application\BTT.Application.csproj" />
     <ProjectReference Include="..\BTT.Domain\BTT.Domain.csproj" />
   </ItemGroup>
 

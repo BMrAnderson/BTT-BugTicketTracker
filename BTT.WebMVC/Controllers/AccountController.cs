@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,12 @@ namespace BTT.WebMVC.Controllers
     public class AccountController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IHttpClientFactory httpClientFactory)
+        public AccountController(IHttpClientFactory httpClientFactory, ILogger<AccountController> logger)
         {
             this._httpClientFactory = httpClientFactory;
+            this._logger = logger;
         }
 
         public IActionResult LogIn()

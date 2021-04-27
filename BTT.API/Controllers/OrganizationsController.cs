@@ -1,10 +1,9 @@
-﻿using BTT.API.Models;
-using BTT.Application.Services.Organizations;
-using BTT.API.Extensions;
+﻿using BTT.Application.Services.Organizations;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using BTT.Application.Services.Projects;
 using BTT.Application.Services.Members;
+using Microsoft.Extensions.Logging;
 
 namespace BTT.API.Controllers
 {
@@ -13,89 +12,99 @@ namespace BTT.API.Controllers
     public class OrganizationsController : ControllerBase
     {
         private readonly IOrganizationService _organizationService;
+        private readonly ILogger<OrganizationsController> _logger;
 
-        public OrganizationsController(IOrganizationService organizationService)
+        public OrganizationsController(IOrganizationService organizationService, ILogger<OrganizationsController> logger)
         {
             this._organizationService = organizationService;
+            this._logger = logger;
         }
 
-        [HttpGet("{organizationId}")]
-        public Response<OrganizationDto> Get(Guid organizationId)
+        [HttpGet("o={organizationId}")]
+        public IActionResult Get(Guid organizationId)
         {
-            var result = new Response<OrganizationDto>();
             try
             {
-               result.Result = _organizationService.Get(organizationId);
+               var org = _organizationService.Get(organizationId);
+             
+                if (org != null) return Ok(org);
+
+                return NotFound(org);
             }
             catch (Exception ex)
             {
-               result = ex.SanitizeException<OrganizationDto>();
+                _logger.LogError(ex.Message);
+
+                return BadRequest();
             }
-            return result;
         }
 
         [HttpPost]
-        public Response<OrganizationDto> Add([FromBody]string organizationName)
+        public IActionResult Add([FromBody]string organizationName)
         {
-            var result = new Response<OrganizationDto>();
             try
             {
-                result.Result = _organizationService.Add(organizationName);
-                result.Message = "Organization added";
+                _organizationService.Add(organizationName);
+                return Created($"/api/organizations/{organizationName}", organizationName);
             }
             catch (Exception ex)
             {
-                result = ex.SanitizeException<OrganizationDto>();
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
-            return result;
         }
 
-        [HttpPost("{organizationId}")]
-        public Response<ProjectDto> Add(Guid organizationId, ProjectDto projectDto)
+        [HttpPost("o={organizationId}")]
+        public IActionResult Add(Guid organizationId, [FromBody] ProjectDto projectDto)
         {
-            var result = new Response<ProjectDto>();
             try
             {
-                result.Result = _organizationService.Add(organizationId, projectDto);
-                result.Message = "Project added to the organization.";
+                var org = _organizationService.Get(organizationId);
+
+                if (org != null)
+                {
+                    var project = _organizationService.Add(organizationId, projectDto);
+                   
+                    return Created($"/api/organizations/{organizationId}", projectDto);
+                }
+                return NotFound(organizationId);
             }
             catch (Exception ex)
             {
-                result = ex.SanitizeException<ProjectDto>();
+                _logger.LogError(ex.Message);
+                
+                return BadRequest();
             }
-            return result;
         }
 
-        [HttpPost("{organizationId}")]
-        public Response<MemberDto> Add(Guid organizationId, [FromBody] MemberDto memberDto)
-        {
-            var result = new Response<MemberDto>();
-            try
-            {
-                result.Result = _organizationService.Add(organizationId, memberDto);
-                result.Message = "Member added to the organization.";
-            }
-            catch (Exception ex)
-            {
-                result = ex.SanitizeException<MemberDto>();
-            }
-            return result;
-        }
+        //[HttpPost("o={organizationId}")]
+        //public IActionResult Add(Guid organizationId, [FromBody] MemberDto memberDto)
+        //{
+           
+        //    try
+        //    {
 
-        [HttpDelete("{organizationId}")]
-        public ResponseMessage Remove(Guid organizationId)
-        {
-            var result = new ResponseMessage();
-            try
-            {
-                _organizationService.Remove(organizationId);
-                result.Message = "Organization successfully removed.";
-            }
-            catch (Exception ex)
-            {
-               result = ex.SanitizeException();
-            }
-            return result;
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+               
+        //    }
+        //    return result;
+        //}
+
+        //[HttpDelete("o={organizationId}")]
+        //public IActionResult Remove(Guid organizationId)
+        //{
+
+        //    try
+        //    {
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+       
+        //    }
+
+        //}
     }
 }

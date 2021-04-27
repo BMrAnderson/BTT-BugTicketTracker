@@ -4,17 +4,19 @@
 @{
     Layout = null;
 
-    List<string> members = new List<string>()
+    List<SelectListItem> memberItems = new List<SelectListItem>()
     {
-        "Brendon",
-        "Jacques"
+        new SelectListItem("Member 1", "Member 1"),
+        new SelectListItem("Member 2", "Member 2")
     };
 
-    List<string> projects = new List<string>()
+    List<SelectListItem> projectItems = new List<SelectListItem>()
     {
-        "Project 1",
-        "Project 2"
+        new SelectListItem("Project 1", "Project 1"),
+        new SelectListItem("Project 2", "Project 2")
     };
+
+    IEnumerable<SelectListItem> levelItems = Html.GetEnumSelectList(typeof(BTT.Domain.Models.Issues.Priority));
 }
 
 @using (Html.BeginForm("AddOrEdit", "Issue", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
@@ -29,8 +31,8 @@
         <div class="modal-body">
             <div class="row">
                 <div class="col-6">
-                    @Html.HiddenFor(model => model.Id)
-                    @Html.HiddenFor(model => model.DateCreated)
+                    <input hidden asp-for="Id"/>
+                    <input hidden asp-for="DateCreated"/>
                     <div class="form-group">
                         <label asp-for="Title" class="control-label"></label>
                         <input asp-for="Title" class="form-control" />
@@ -41,8 +43,7 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Priority" class="control-label"></label>
-                        @Html.DropDownListFor(model => model.Priority, Html.GetEnumSelectList(typeof(BTT.Domain.Models.Issues.Priority)),
-                        null, new { @class = "form-control" })
+                        <select asp-for="Priority" asp-items="levelItems" class="form-control"></select>
                     </div>
                     <div class="form-group">
                         <label class="control-label">End Date</label>
@@ -64,11 +65,25 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Project Assigned</label>
-                        @Html.DropDownListFor(model => model.AssignedProjectName, new SelectList(projects), null, new { @class = "form-control" })
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-secondary" type="button" id="addProjectButton">Create</button>
+                            </div>
+                            <select aria-describedby="addProjectButton" asp-for="AssignedProjectName" asp-items="projectItems" class="form-control" id="projectSelectList"></select>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Member Assigned</label>
-                        @Html.DropDownListFor(model => model.AssignedMemberName, new SelectList(members), null, new { @class = "form-control" })
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-secondary" type="button" id="addMemberButton">Create</button>
+                            </div>
+                            <select aria-describedby="addMemberButton" asp-for="AssignedMemberName" asp-items="memberItems" class="form-control" id="memberSelectList"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Add a Comment</label>
+                        <textarea asp-for="Comments" class="form-control" rows="3"></textarea>
                     </div>
                 </div>
             </div>

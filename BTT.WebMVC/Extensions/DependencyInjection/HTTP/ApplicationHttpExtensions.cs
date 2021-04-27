@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BTT.WebMVC.Extensions.HTTP
+namespace BTT.WebMVC.Extensions.DependencyInjection.HTTP
 {
-    public static class ApplicationHttpClientFactoryExtensions
+    public static class ApplicationHttpExtensions
     {
-        public static IServiceCollection RegisterApplicationHttpClients(this IServiceCollection services)
+        public static IServiceCollection ConfigureApplicationHttpClients(this IServiceCollection services)
         {
             services.AddHttpIssueClient();
             services.AddHttpMemberClient();

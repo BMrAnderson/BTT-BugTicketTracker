@@ -8,10 +8,10 @@ namespace BTT.WebMVC.Services
 {
     public interface IOrganizationHttpService
     {
-        OrganizationViewModel Get(Guid organzationId);
-        OrganizationViewModel Add(string organizationName);
-        ProjectViewModel Add(Guid organizationId, ProjectViewModel projectVM);
-        MemberViewModel Add(Guid organizationId, MemberViewModel memberVM);
-        void Remove(Guid organizationId);
+        Task<OrganizationViewModel> Get(Guid organzationId);
+        Task<bool> Add(string organizationName);
+        Task<bool> Add(Guid organizationId, ProjectViewModel projectVM);
+        Task<bool> Add(Guid organizationId, MemberViewModel memberVM);
+        Task<bool> Remove(Guid organizationId);
     }
 }

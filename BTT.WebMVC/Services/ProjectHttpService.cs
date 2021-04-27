@@ -1,41 +1,85 @@
-﻿using BTT.WebMVC.Models.ViewModels;
+﻿using AutoMapper;
+using BTT.Application.Services.Issues;
+using BTT.Application.Services.Members;
+using BTT.Application.Services.Projects;
+using BTT.WebMVC.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BTT.WebMVC.Services
 {
     public class ProjectHttpService : IProjectHttpService
     {
-        public ProjectViewModel Add(ProjectViewModel projectVM)
+        private readonly HttpClient _httpClient;
+        private readonly IMapper _mapper;
+
+        public ProjectHttpService(HttpClient httpClient, IMapper mapper)
         {
-            throw new NotImplementedException();
+            this._httpClient = httpClient;
+            this._mapper = mapper;
         }
 
-        public MemberViewModel Add(Guid projectId, MemberViewModel memberVM)
+        public async Task<bool> Add(ProjectViewModel projectVM)
         {
-            throw new NotImplementedException();
+            var projectDto = _mapper.Map<ProjectViewModel, ProjectDto>(projectVM);
+
+            var projectDtoContent = new StringContent(JsonSerializer.Serialize(projectDto), Encoding.UTF8, "application/json");
+
+            var postTask = await _httpClient.PostAsync(string.Empty, projectDtoContent);
+
+            return postTask.IsSuccessStatusCode;
         }
 
-        public IssueViewModel Add(Guid memberId, Guid projectId, IssueViewModel issueVM)
+        public async Task<bool> Add(Guid projectId, MemberViewModel memberVM)
         {
-            throw new NotImplementedException();
+            var memberDto = _mapper.Map<MemberViewModel, MemberDto>(memberVM);
+
+            var memberDtoContent = new StringContent(JsonSerializer.Serialize(memberDto), Encoding.UTF8, "application/json");
+
+            var postTask = await _httpClient.PostAsync($"p={projectId}", memberDtoContent);
+
+            return postTask.IsSuccessStatusCode;
         }
 
-        public void Edit(ProjectViewModel projectVM)
+        public async Task<bool> Add(Guid memberId, Guid projectId, IssueViewModel issueVM)
         {
-            throw new NotImplementedException();
+            var issueDto = _mapper.Map<IssueViewModel, IssueDto>(issueVM);
+
+            var issueDtoContent = new StringContent(JsonSerializer.Serialize(issueDto), Encoding.UTF8, "application/json");
+
+            var postTask = await _httpClient.PostAsync($"m={projectId}/p={projectId}", issueDtoContent);
+
+            return postTask.IsSuccessStatusCode;
         }
 
-        public ProjectViewModel Get(Guid projectId)
+        public async Task<bool> Edit(ProjectViewModel projectVM)
         {
-            throw new NotImplementedException();
+            var projectDto = _mapper.Map<ProjectViewModel, ProjectDto>(projectVM);
+
+            var projectDtoContent = new StringContent(JsonSerializer.Serialize(projectDto), Encoding.UTF8, "application/json");
+
+            var putTask = await _httpClient.PutAsync(string.Empty, projectDtoContent);
+
+            return putTask.IsSuccessStatusCode;
         }
 
-        public void Remove(Guid projectId)
+        public async Task<ProjectViewModel> Get(Guid projectId)
         {
-            throw new NotImplementedException();
+            return await JsonSerializer.DeserializeAsync<ProjectViewModel>
+                (await _httpClient.GetStreamAsync($"p={projectId}"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+
+        public async Task<bool> Remove(Guid projectId)
+        {
+            var deleteTask = await _httpClient.DeleteAsync($"p={projectId}");
+
+            return deleteTask.IsSuccessStatusCode;
         }
     }
 }

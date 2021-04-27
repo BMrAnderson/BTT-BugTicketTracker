@@ -1,36 +1,70 @@
-﻿using BTT.WebMVC.Models.ViewModels;
+﻿using AutoMapper;
+using BTT.Application.Services.Members;
+using BTT.Application.Services.Projects;
+using BTT.WebMVC.Models.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BTT.WebMVC.Services
 {
     public class OrganizationHttpService : IOrganizationHttpService
     {
-        public OrganizationViewModel Add(string organizationName)
+        private readonly HttpClient _httpClient;
+        private readonly IMapper _mapper;
+
+        private const string applicationJsonMediaType = "application/json";
+        
+        public OrganizationHttpService(HttpClient httpClient, IMapper mapper)
         {
-            throw new NotImplementedException();
+            this._httpClient = httpClient;
+            this._mapper = mapper;
         }
 
-        public ProjectViewModel Add(Guid organizationId, ProjectViewModel projectVM)
+        public async Task<bool> Add(string organizationName)
         {
-            throw new NotImplementedException();
+            var organizationNameContent = new StringContent(organizationName, Encoding.UTF8, applicationJsonMediaType);
+
+            var postTask = await _httpClient.PostAsync(string.Empty, organizationNameContent);
+
+            return postTask.IsSuccessStatusCode;
         }
 
-        public MemberViewModel Add(Guid organizationId, MemberViewModel memberVM)
+        public async Task<bool> Add(Guid organizationId, ProjectViewModel projectVM)
         {
-            throw new NotImplementedException();
+            var projectDto = _mapper.Map<ProjectViewModel, ProjectDto>(projectVM);
+
+            var projectDtoContent = new StringContent(JsonSerializer.Serialize(projectDto), Encoding.UTF8, applicationJsonMediaType);
+
+            var postTask = await _httpClient.PostAsync($"p={organizationId}", projectDtoContent);
+
+            return postTask.IsSuccessStatusCode;
         }
 
-        public OrganizationViewModel Get(Guid organzationId)
+        public async Task<bool> Add(Guid organizationId, MemberViewModel memberVM)
         {
-            throw new NotImplementedException();
+            var memberDto = _mapper.Map<MemberViewModel, MemberDto>(memberVM);
+
+            var memberDtoContent = new StringContent(JsonSerializer.Serialize(memberDto), Encoding.UTF8, applicationJsonMediaType);
+
+            var postTask = await _httpClient.PostAsync($"p={organizationId}", memberDtoContent);
+
+            return postTask.IsSuccessStatusCode;
         }
 
-        public void Remove(Guid organizationId)
+        public async Task<OrganizationViewModel> Get(Guid organzationId)
         {
-            throw new NotImplementedException();
+            return await JsonSerializer.DeserializeAsync<OrganizationViewModel>
+                (await _httpClient.GetStreamAsync($"o={organzationId}"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+
+        public async Task<bool> Remove(Guid organizationId)
+        {
+            var deleteTask = await _httpClient.DeleteAsync($"o={organizationId}");
+
+            return deleteTask.IsSuccessStatusCode;
         }
     }
 }

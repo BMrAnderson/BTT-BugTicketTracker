@@ -4,6 +4,7 @@ using BTT.WebMVC.Models;
 using BTT.WebMVC.Models.ViewModels;
 using BTT.WebMVC.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +17,13 @@ namespace BTT.WebMVC.Controllers
     public class IssueController : Controller
     {
         private static List<IssueViewModel> bugs = new List<IssueViewModel>();
-        private readonly IIssueHttpService _service;
+        private readonly IIssueHttpService _issueHttpService;
+        private readonly ILogger<IssueController> _logger;
 
-        public IssueController(IIssueHttpService service)
+        public IssueController(IIssueHttpService service, ILogger<IssueController> logger)
         {
-            this._service = service;
+            this._issueHttpService = service;
+            this._logger = logger;
         }
 
         //[HttpGet("{memberId}")]
@@ -29,6 +32,24 @@ namespace BTT.WebMVC.Controllers
            
             bugs.AddRange(GetBugs());
 
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Attachments(Guid issueId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Attachments(AttachmentViewModel attachment)
+        {
+            return View(attachment);
+        }
+
+        [HttpGet]
+        public IActionResult Comments(Guid issueId)
+        {
             return View();
         }
 
@@ -53,7 +74,7 @@ namespace BTT.WebMVC.Controllers
             if (model.Id != Guid.Empty)
             {
 
-                _service.Add(model);
+                _issueHttpService.Add(model);
 
                 bugs.Add(model);
 
@@ -79,6 +100,15 @@ namespace BTT.WebMVC.Controllers
             List<IssueViewModel> issues = bugs.ToList();
 
             return Json(new { data = issues }, new JsonSerializerOptions());
+        }
+
+        [HttpGet]
+        public IActionResult Edit(Guid issueId)
+        {
+            //var issue = _issueHttpService.Get(issueId);
+            var issue = GetBugs().Where(i => i.Id == issueId).FirstOrDefault();
+
+            return View(issue);
         }
 
 
@@ -116,5 +146,25 @@ namespace BTT.WebMVC.Controllers
             };
             return bugs;
         }
+
+        //[HttpDelete]
+        //public IActionResult Remove(Guid issueId)
+        //{
+        //    bool isRemoved = _issueHttpService.Remove(issueId);
+
+        //    string messageResult = isRemoved ? "Saved Successfully" : "Error";
+
+        //    return Json(new { success = isRemoved, message = messageResult }, new JsonSerializerOptions());
+        //}
+
+        //[HttpPut]
+        //public IActionResult Edit(IssueViewModel issueVM)
+        //{
+        //    bool isUpdated = _issueHttpService.Edit(issueVM);
+
+        //    string messageResult = isUpdated ? "Updated Successfully" : "Error";
+
+        //    return Json(new { success = isUpdated, message = messageResult }, new JsonSerializerOptions());
+        //}
     }
 }
